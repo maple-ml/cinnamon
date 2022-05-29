@@ -1,0 +1,3 @@
+D:/code/maple/cinnamon/CMakeFiles/cinnamon.dir
+D:/code/maple/cinnamon/CMakeFiles/ALL_BUILD.dir
+D:/code/maple/cinnamon/CMakeFiles/ZERO_CHECK.dir
