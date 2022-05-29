@@ -24,7 +24,6 @@ As of writing this (February 16th, 2021) there are no built binaries that can be
 ### Dependencies
 * [Cappuccino SDK](https://github.com/AndreNIH/CappuccinoSDK)
 * [MinHook](https://github.com/TsudaKageyu/minhook/)
-* [fmtlib 7.1.3](https://github.com/fmtlib/fmt)
 * [Python 3.9 (with debug binaries added)](https://www.python.org/downloads/)
 
 ## Development
