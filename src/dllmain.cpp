@@ -16,7 +16,7 @@ USING_NS_CC;
 #include "utilities.h"
 
 // bindings
-#include "bindings/cinnamon/cinnamon.h"
+#include "bindings/cinnamon.h"
 #include "bindings/geometrydash/geometrydash.h"
 
 
@@ -35,7 +35,9 @@ DWORD WINAPI dll_thread(void* hModule) {
 
     for (const auto& dirEntry : std::filesystem::directory_iterator(mod_path.c_str())) {
         if (utilities::hasEnding(dirEntry.path().string(), ".py") && !dirEntry.is_directory()) {
-            utilities::runPythonFile(dirEntry.path().string().c_str());
+            std::cout << "running python file " << dirEntry.path().string() << "\n";
+            //utilities::runPythonFile(dirEntry.path().string().c_str());
+
             py::object mod = py::eval_file(dirEntry.path().string().c_str());
 
             globals::modules.insert(std::pair<std::string, py::object>(dirEntry.path().parent_path().filename().string(), mod));

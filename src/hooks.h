@@ -9,6 +9,7 @@
 #include <string>
 
 #include "bindings/geometrydash/geometrydash.h"
+#include "bindings/cinnamon.h"
 
 namespace hooks {
 	class PythonHook {
@@ -26,7 +27,7 @@ namespace hooks {
 			
 			globals::hookmap.insert(std::pair<std::string, py::function>(functionname, detour));
 
-			std::cout << "hooking\n";
+			std::cout << "hooking " << PlayerObject::pushButtonA << std::endl;
 
 			MH_STATUS status = MH_CreateHook((PVOID)address, PlayerObject::pushButtonH, (LPVOID*)&PlayerObject::pushButtonO);
 

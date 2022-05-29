@@ -9,8 +9,6 @@
 #include "MinHook.h"
 #include <tuple>
 
-//#include "bindings/geometrydash/geometrydash.h"
-
 namespace py = pybind11;
 
 USING_NS_CC;
@@ -151,5 +149,9 @@ namespace utilities {
         freopen_s(&fDummy, "CONIN$", "r", stdin);
         freopen_s(&fDummy, "CONOUT$", "w", stderr);
         freopen_s(&fDummy, "CONOUT$", "w", stdout);
+    }
+
+    void log(std::string message, std::string level="INFO") {
+        std::cout << "CINNAMON: " << level << " >> " << message << std::endl;
     }
 }

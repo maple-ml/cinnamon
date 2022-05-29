@@ -9,7 +9,7 @@ public:
 	void pushButton(PlayerObject* self, void* PlayerButton) {
 		return reinterpret_cast<void(__thiscall*)(PlayerObject*, void*)>(utilities::getBase() + 0x1F4E40)(self, PlayerButton);
 	}
-	static inline void(__thiscall* pushButtonO)(PlayerObject* self, void* PlayerButton) = 0;
+	static inline void(__thiscall* pushButtonO)(PlayerObject* self, void* PlayerButton);
 	static inline size_t pushButtonA = 0x1F4E40;
 	static void __fastcall pushButtonH(PlayerObject* self, int edx, void* PlayerButton) {
 		std::cout << "func" << std::endl;
