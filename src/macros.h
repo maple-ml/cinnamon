@@ -12,6 +12,7 @@
 #define CINNAMON_NAME(name, value) static inline const char* name = value;
 
 #define CINNAMON_ADDRESS(name, addr) static inline size_t name = utilities::getBase() + addr;
+
 #define CINNAMON_ORIGINAL(name, ret, args) static inline void(__thiscall* name)(args);
 
 #define CINNAMON_FUNC(ret, addr, types, args) return reinterpret_cast<ret(__thiscall*)(types)>(utilities::getBase() + addr)(args);

@@ -29,7 +29,7 @@ DWORD WINAPI dll_thread(void* hModule) {
     std::string mod_path = utilities::getGDPath();
     mod_path.append("mods\\");
 
-    std::cout << "initalized\n";
+    utilities::log("Cinnamon Initialized!", "INFO");
 
     py::gil_scoped_acquire acquire;
 
@@ -37,15 +37,21 @@ DWORD WINAPI dll_thread(void* hModule) {
         if (utilities::hasEnding(dirEntry.path().string(), ".py") && !dirEntry.is_directory()) {
             std::string file = dirEntry.path().string().c_str();
 
-            std::cout << "running python file " << file << "\n";
-
-            //utilities::runPythonFile(file); // cocos thread
+            utilities::log("Running Python file: " + file, "INFO");
 
             py::object mod = py::eval_file(file); // non cocos thread
-
             globals::modules.insert(std::pair<std::string, py::object>(file, mod));
+
+            utilities::log("Python file started: " + file, "INFO");
         }
     }
+
+    py::exec("\
+    import sys\
+    def hook(exc_type, exc_value, exc_traceback):\
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)\
+    sys.excepthook = hook\
+    ");
 
     py::gil_scoped_release release;
 

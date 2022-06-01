@@ -24,7 +24,6 @@ namespace hooks {
 			m_detour = detour;
 			
 			globals::hookmap.insert(std::pair<std::string, py::function>(functionname, detour));
-			MH_CreateHook((PVOID)address, PlayerObject::pushButtonH, (LPVOID*)&PlayerObject::pushButtonO);
 		}
 
 		void enable() {
