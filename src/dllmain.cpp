@@ -35,7 +35,7 @@ DWORD WINAPI dll_thread(void* hModule) {
 
     for (const auto& dirEntry : std::filesystem::directory_iterator(mod_path.c_str())) {
         if (utilities::hasEnding(dirEntry.path().string(), ".py") && !dirEntry.is_directory()) {
-            std::string file = dirEntry.path().parent_path().filename().string();
+            std::string file = dirEntry.path().string().c_str();
 
             std::cout << "running python file " << file << "\n";
 
