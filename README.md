@@ -60,4 +60,4 @@ cmake --build build32 --config Release
 For new ideas and features, we would prefer for you to write an issue before trying to add it to show the maintainers.
 
 ## License
-Cinnamon uses the MIT license. All of the projects used here have their own licenses, and any packed dependency will have their license provided in the [incl](https://github.com/maple-ml/cinnamon/tree/master/incl) folder for your convenience.
+Cinnamon uses the MIT license. All of the projects used here have their own licenses, and any packed dependency will have their license provided in the [include](https://github.com/maple-ml/cinnamon/tree/master/include) folder for your convenience.
