@@ -28,7 +28,6 @@ namespace cinnamon_py {
 PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
     m.def("run", &utilities::runPyOnMain); // broken atm
     m.def("loop", &cinnamon_py::loop);
-    m.def("get_gd_path", &utilities::getGDPath);
     m.def("enable_debug", &utilities::enableDebugMode);
     m.def("hook", &hooks::hookPython); // hooks a direct address
     m.def("alert", py::overload_cast<std::string>(&cinnamon_py::alert));
@@ -36,4 +35,5 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
     m.def("alert", py::overload_cast<std::string, const char*, const char*>(&cinnamon_py::alert));
     m.def("log", &utilities::log);
     m.attr("base") = utilities::getBase();
+    m.attr("gd_path") = utilities::getGDPath();
 }

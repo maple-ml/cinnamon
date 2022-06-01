@@ -46,13 +46,6 @@ DWORD WINAPI dll_thread(void* hModule) {
         }
     }
 
-    py::exec("\
-    import sys\
-    def hook(exc_type, exc_value, exc_traceback):\
-        sys.__excepthook__(exc_type, exc_value, exc_traceback)\
-    sys.excepthook = hook\
-    ");
-
     py::gil_scoped_release release;
 
     return 0;
