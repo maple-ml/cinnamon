@@ -22,14 +22,15 @@
 As of writing this (February 16th, 2021) there are no built binaries that can be added alongside Geometry Dash. We are currently in a **very early** stage of development, and do not expect for much to happen in a while.
 
 ### Dependencies
-* [Cappuccino SDK](https://github.com/AndreNIH/CappuccinoSDK)
+* [cocos headers](https://github.com/HJfod/cocos-headers)
 * [MinHook](https://github.com/TsudaKageyu/minhook/)
-* [Python 3.9 (with debug binaries added)](https://www.python.org/downloads/)
+* [Python 3.9 (32-bit version)](https://www.python.org/downloads/)
 
 ## Development
 When developing or debugging Cinnamon or any associated projects, a few prerequisites needed are:
 * An IDE that supports working with C++ (standard revision 2017) with proper IntelliSense; primarily [Visual Studio 2019](https://visualstudio.microsoft.com/vs/), for the .sln
-* A compiler that can handle C++17, and Windows headers; such as MSVC.
+* CMake, to use the build configuration
+* Optional: [maple-cli](https://github.com/maple-ml/cli), for ease of use 
 
 ### Source Code
 You are able to clone the repository over command line, or by downloading it. Updating this code to the latest commit would be done with `git pull`, inside the tau directory.
@@ -39,8 +40,20 @@ cd cinnamon
 ```
 
 ### Building
-We have not written a building guide, as this project is primarily self-explanatory built using [Visual Studio 2019](https://visualstudio.microsoft.com/vs/) and MSVC.
-This section will be community managed, otherwise.
+If using [maple-cli](https://github.com/maple-ml/cli), all you have to do is run `maple build` in the directory of cinnamon. The optional flags for this command are as follows:
+
+`--quiet`: Tries to make the build quieter
+`--run`: Attempts to run Geometry Dash after build has finished, great for debugging (`GDPATH` must be defined)
+`--copy`: If the build succeeds, copies the generated dll to the `Geometry Dash/mods` directory (`GDPATH` must be defined)
+
+`GDPATH` can be defined via environment variable (`%GDPATH%`) or the command line argument `--path GDPATH`
+
+If you are not using [maple-cli](https://github.com/maple-ml/cli) you need to compile with cmake directly.
+
+Here's what we recommend
+```
+cmake --build build32 --config Release
+```
 
 ## Contributions
 
