@@ -7,8 +7,8 @@
 
 class PlayerObject : public CCNode {
 public:
-	void pushButton(PlayerObject* self, void* PlayerButton) { CINNAMON_FUNC(void, 0x1F4E40, CINNAMON_ARGS(PlayerObject*, void*), CINNAMON_ARGS(self, PlayerButton)) }
-	CINNAMON_HOOK(pushButtonH, pushButtonO, CINNAMON_ARGS(self, PlayerButton), CINNAMON_ARGS(PlayerObject* self, int edx, void* PlayerButton));
+	void pushButton(void* PlayerButton) { CINNAMON_FUNC(__thiscall, void, 0x1F4E40, CINNAMON_ARGS(PlayerObject*, void*), CINNAMON_ARGS(this, PlayerButton)) }
+	CINNAMON_HOOK_VOID(pushButtonH, pushButtonO, CINNAMON_ARGS(self, PlayerButton), CINNAMON_ARGS(PlayerObject* self, int edx, void* PlayerButton));
 	CINNAMON_ORIGINAL(pushButtonO, void, CINNAMON_ARGS(PlayerObject*, void*));
 	CINNAMON_ADDRESS(pushButtonA, 0x1F4E40);
 	CINNAMON_NAME(pushButtonN, "PlayerObject::pushButtonH");

@@ -19,7 +19,6 @@ USING_NS_CC;
 #include "bindings/cinnamon.h"
 #include "bindings/geometrydash/geometrydash.h"
 
-
 DWORD WINAPI dll_thread(void* hModule) {
     utilities::initialize();
     utilities::enableDebugMode();
@@ -39,8 +38,8 @@ DWORD WINAPI dll_thread(void* hModule) {
 
             utilities::log("Running Python file: " + file, "INFO");
 
+            //utilities::runPythonFile(file); // cocos thread
             py::object mod = py::eval_file(file); // non cocos thread
-            globals::modules.insert(std::pair<std::string, py::object>(file, mod));
 
             utilities::log("Python file started: " + file, "INFO");
         }
@@ -48,6 +47,7 @@ DWORD WINAPI dll_thread(void* hModule) {
 
     py::gil_scoped_release release;
 
+    utilities::log("Main thread exiting...", "DEBUG");
     return 0;
 }
 

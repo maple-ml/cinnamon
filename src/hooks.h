@@ -8,8 +8,7 @@
 #include <map>
 #include <string>
 
-#include "bindings/geometrydash/geometrydash.h"
-#include "bindings/cinnamon.h"
+#include "geometrydash.h"
 
 namespace hooks {
 	class PythonHook {
@@ -23,7 +22,7 @@ namespace hooks {
 			m_address = address;
 			m_detour = detour;
 			
-			globals::hookmap.insert(std::pair<std::string, py::function>(functionname, detour));
+			globals::pyhookmap.insert(std::pair<std::string, py::function>(functionname, detour));
 		}
 
 		void enable() {

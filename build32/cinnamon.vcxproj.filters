@@ -4,6 +4,9 @@
     <ClCompile Include="D:\code\maple\cinnamon\src\dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\code\maple\cinnamon\src\mod_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\code\maple\cinnamon\CMakeLists.txt" />

@@ -17,7 +17,10 @@ endif()
 add_library(cocos2d INTERFACE)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-  src/
+  src
+  src/bindings
+  src/bindings/cocos2d
+  src/bindings/geometrydash
   include
   include/cocos2dx
   include/cocos2dx/include
