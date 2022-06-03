@@ -1,0 +1,23 @@
+name: CMake
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      run: cmake -G "Visual Studio 16 2019" -A Win32 -S . -B "build32"
+
+    - name: Build
+      run: cmake --build build32 --config ${{env.BUILD_TYPE}}
