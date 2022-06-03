@@ -154,4 +154,14 @@ namespace utilities {
     void log(std::string message, std::string level="INFO") {
         std::cout << "CINNAMON: " << level << " >> " << message << std::endl;
     }
+
+    void hookCinnamon(PVOID address, PVOID hook, LPVOID* original) {
+        std::stringstream addr_stream;
+        addr_stream << std::hex << address;
+        std::string addr( addr_stream.str() );
+
+        log("Hooking " + addr, "DEBUG");
+        MH_STATUS status = MH_CreateHook(address, hook, original);
+        log(std::string("Hooked ") + addr + std::string(" with status ") + std::string(MH_StatusToString(status)), "DEBUG");
+    }
 }

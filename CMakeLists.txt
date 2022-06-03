@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_CXX_STANDARD 17)
 project(cinnamon CXX)
 
-file(GLOB SOURCES src/*.cpp)
+file(GLOB SOURCES src/*.cpp include/cocos2dx/robtop/CCMenuItemSpriteExtra.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
 set(CMAKE_SIZEOF_VOID_P 4)

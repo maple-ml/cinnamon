@@ -14,6 +14,7 @@ USING_NS_CC;
 
 #include "macros.h"
 #include "utilities.h"
+#include "mod_menu.h"
 
 // bindings
 #include "bindings/cinnamon.h"
@@ -29,6 +30,10 @@ DWORD WINAPI dll_thread(void* hModule) {
     mod_path.append("mods\\");
 
     utilities::log("Cinnamon Initialized!", "INFO");
+
+    ModMenu::enable_hooks();
+    
+    utilities::log("ModMenu hooks enabled", "DEBUG");
 
     py::gil_scoped_acquire acquire;
 

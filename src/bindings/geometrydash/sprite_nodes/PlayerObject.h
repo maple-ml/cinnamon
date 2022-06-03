@@ -20,5 +20,5 @@ void PlayerObject_init(py::module &m) {
 		c.def("pushButtonO", [](PlayerObject* self, void* PlayerButton) { return PlayerObject::pushButtonO(self, PlayerButton); });
 		c.attr("pushButtonA") = PlayerObject::pushButtonA;
 		c.attr("pushButtonN") = PlayerObject::pushButtonN;
-		MH_CreateHook((PVOID)PlayerObject::pushButtonA, PlayerObject::pushButtonH, (LPVOID*)&PlayerObject::pushButtonO);
+		utilities::hookCinnamon((PVOID)PlayerObject::pushButtonA, PlayerObject::pushButtonH, (LPVOID*)&PlayerObject::pushButtonO);
 }

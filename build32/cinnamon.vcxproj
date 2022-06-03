@@ -318,7 +318,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D:\code\maple\cinnamon\src\dllmain.cpp" />
-    <ClCompile Include="D:\code\maple\cinnamon\src\mod_menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\code\maple\cinnamon\build32\ZERO_CHECK.vcxproj">

@@ -312,6 +312,8 @@ THE SOFTWARE.
 
 #include "robtop/glfw/glfw3.h"
 
+#include "robtop/CCMenuItemSpriteExtra.h"
+
 NS_CC_BEGIN
 
 CC_DLL const char* cocos2dVersion();

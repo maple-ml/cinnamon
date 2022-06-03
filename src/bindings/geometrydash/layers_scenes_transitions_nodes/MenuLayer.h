@@ -25,11 +25,11 @@ void MenuLayer_init(py::module &m) {
 		c.def("createO", []() { return MenuLayer::createO(); });
         c.attr("createA") = MenuLayer::createA;
         c.attr("createN") = MenuLayer::createN;
-        MH_CreateHook((PVOID)MenuLayer::createA, MenuLayer::createH, (LPVOID*)&MenuLayer::createO);
+        utilities::hookCinnamon((PVOID)MenuLayer::createA, MenuLayer::createH, (LPVOID*)&MenuLayer::createO);
 
         c.def("init", &MenuLayer::init);
 		c.def("initO", [](MenuLayer* self) { return MenuLayer::initO(self); });
         c.attr("initA") = MenuLayer::initA;
         c.attr("initN") = MenuLayer::initN;
-        MH_CreateHook((PVOID)MenuLayer::initA, MenuLayer::initH, (LPVOID*)&MenuLayer::initO);
+        utilities::hookCinnamon((PVOID)MenuLayer::initA, MenuLayer::initH, (LPVOID*)&MenuLayer::initO);
 }

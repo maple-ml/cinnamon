@@ -67,4 +67,5 @@
             py::gil_scoped_release release; \
         } \
     } \
+    hook(args); \
 }

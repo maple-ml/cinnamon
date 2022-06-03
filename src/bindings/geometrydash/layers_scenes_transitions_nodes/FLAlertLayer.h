@@ -28,5 +28,5 @@ void FLAlertLayer_init(py::module &m) {
         c.def("showO", [](FLAlertLayer* self) { return FLAlertLayer::showO(self); });
         c.attr("showA") = FLAlertLayer::showA;
         c.attr("showN") = FLAlertLayer::showN;
-        MH_CreateHook((PVOID)FLAlertLayer::showA, FLAlertLayer::showH, (LPVOID*)&FLAlertLayer::showO);
+        utilities::hookCinnamon((PVOID)FLAlertLayer::showA, FLAlertLayer::showH, (LPVOID*)&FLAlertLayer::showO);
 }
