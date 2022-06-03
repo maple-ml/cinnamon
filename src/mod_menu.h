@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "macros.h"
+#include "menu_nodes/CCMenuItemSpriteExtra.h"
 
 USING_NS_CC;
 using namespace extension;
