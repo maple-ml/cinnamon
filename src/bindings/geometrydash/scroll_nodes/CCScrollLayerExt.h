@@ -32,9 +32,7 @@ class TableViewCell : public CCLayer {
                 movss xmm2, width
                 movss xmm3, height
             }
-            reinterpret_cast<void(__thiscall*)(TableViewCell*, const char*)>(
-                utilities::getBase() + 0x32E70
-            )(this, name);
+            reinterpret_cast<void(__thiscall*)(TableViewCell*, const char*)>(utilities::getBase() + 0x32E70)(this, name);
         }
 
         static TableViewCell* create(const char* name, float width, float height) {
@@ -53,9 +51,7 @@ class TableViewCell : public CCLayer {
 class StatsCell : public TableViewCell {
     public:
         void updateBGColor(unsigned int index) {
-            reinterpret_cast<void(__thiscall*)(StatsCell*, unsigned int)>(
-                utilities::getBase() + 0x59cf0
-            )(this, index);
+            reinterpret_cast<void(__thiscall*)(StatsCell*, unsigned int)>(utilities::getBase() + 0x59cf0)(this, index);
         }
 };
 

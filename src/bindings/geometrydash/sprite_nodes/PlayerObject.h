@@ -8,8 +8,9 @@
 class PlayerObject : public CCNode {
 public:
 	void pushButton(void* PlayerButton) { CINNAMON_FUNC(__thiscall, void, 0x1F4E40, CINNAMON_ARGS(PlayerObject*, void*), CINNAMON_ARGS(this, PlayerButton)) }
-	CINNAMON_HOOK_VOID(pushButtonH, pushButtonO, CINNAMON_ARGS(self, PlayerButton), CINNAMON_ARGS(PlayerObject* self, int edx, void* PlayerButton));
-	CINNAMON_ORIGINAL(pushButtonO, void, CINNAMON_ARGS(PlayerObject*, void*));
+	CINNAMON_HOOK_VOID(pushButtonH, pushButtonOO, CINNAMON_ARGS(self, PlayerButton), CINNAMON_ARGS(PlayerObject* self, int edx, void* PlayerButton));
+	CINNAMON_ORIGINAL(pushButtonO_, void, CINNAMON_ARGS(PlayerObject*, void*));
+	CINNAMON_ORIGINAL_HOOK_VOID("PlayerObject::pushButtonH", pushButtonO, pushButtonC, pushButtonO_, CINNAMON_ARGS(self, PlayerButton), CINNAMON_ARGS(PlayerObject* self, void* PlayerButton));
 	CINNAMON_ADDRESS(pushButtonA, 0x1F4E40);
 	CINNAMON_NAME(pushButtonN, "PlayerObject::pushButtonH");
 };
@@ -20,5 +21,5 @@ void PlayerObject_init(py::module &m) {
 		c.def("pushButtonO", [](PlayerObject* self, void* PlayerButton) { return PlayerObject::pushButtonO(self, PlayerButton); });
 		c.attr("pushButtonA") = PlayerObject::pushButtonA;
 		c.attr("pushButtonN") = PlayerObject::pushButtonN;
-		utilities::hookCinnamon((PVOID)PlayerObject::pushButtonA, PlayerObject::pushButtonH, (LPVOID*)&PlayerObject::pushButtonO);
+		utilities::hookCinnamon((PVOID)PlayerObject::pushButtonA, PlayerObject::pushButtonH, (LPVOID*)&PlayerObject::pushButtonO_);
 }

@@ -22,7 +22,7 @@ namespace hooks {
 			m_address = address;
 			m_detour = detour;
 			
-			globals::pyhookmap.insert(std::pair<std::string, py::function>(functionname, detour));
+			globals::pyHookmap.insert(std::pair<std::string, py::function>(functionname, detour));
 		}
 
 		void enable() {

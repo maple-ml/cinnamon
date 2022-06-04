@@ -22,19 +22,27 @@ namespace cinnamon_py {
     void register_mod(py::object mod) {
         using namespace pybind11::literals;
         py::module_ threading = py::module_::import("threading");
-        threading.attr("Thread")("target"_a=mod).attr("start")();
+        
+        threading.attr("Thread")("target"_a=mod.attr("_init"), "args"_a=py::make_tuple(mod)).attr("start")();
     }
 
     class Mod {
     public:
-        std::string name;
-        std::string version;
-        std::string author;
-        std::string description;
+        Mod() {
+
+        }
 
         void loop() {
-            // keep interpreter alive
-            py::exec("while True: pass");
+            py::exec("while True: pass"); // keep interpreter alive
+        }
+
+        static void _init(py::object mod_cls) { // PRIVATE TO PY, called on thread, runs __init__ and starts loop
+            py::object mod = mod_cls();
+
+            globals::modules.insert<std::pair<std::string, py::object>>(std::pair<std::string, py::object>(mod.attr("name").cast<std::string>(), mod));
+
+            utilities::log("Starting loop", "DEBUG");
+            mod.attr("loop")();
         }
 
         void on_enable() {
@@ -59,6 +67,8 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
     m.attr("base") = utilities::getBase();
     m.attr("gd_path") = utilities::getGDPath();
 
-    auto c = py::class_<cinnamon_py::Mod>(m, "Mod");
+    auto c = py::class_<cinnamon_py::Mod>(m, "Mod", py::dynamic_attr());
+        c.def(py::init<>());
+        c.def("_init", &cinnamon_py::Mod::_init);
         c.def("loop", &cinnamon_py::Mod::loop);
 }

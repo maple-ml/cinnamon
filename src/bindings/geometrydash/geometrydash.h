@@ -6,6 +6,7 @@
 
 // layers_scenes_transitions_nodes
 #include "layers_scenes_transitions_nodes/FLAlertLayer.h"
+#include "layers_scenes_transitions_nodes/GJListLayer.h" // no bindings yet
 #include "layers_scenes_transitions_nodes/MenuLayer.h"
 
 // menu_nodes
