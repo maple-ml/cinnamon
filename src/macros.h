@@ -72,7 +72,7 @@
 }
 
 #define CINNAMON_ORIGINAL_HOOK(hookname, name, name2, original, ret, args, types) static inline int name2 = 1; \
-static void __fastcall name(types) { \
+static ret __fastcall name(types) { \
     std::multimap<std::string, py::function>::iterator itr; \
     int itr2 = 0; \
     for (itr = globals::pyHookmap.begin(); itr != globals::pyHookmap.end(); ++itr) { \

@@ -1,4 +1,5 @@
 #define WIN32_LEAN_AND_MEAN
+#undef ERROR
 #include <windows.h>
 #include <stdio.h>
 #include <iostream>

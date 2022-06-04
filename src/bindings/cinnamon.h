@@ -62,7 +62,8 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
     m.def("alert", py::overload_cast<std::string>(&cinnamon_py::alert));
     m.def("alert", py::overload_cast<std::string, const char*>(&cinnamon_py::alert));
     m.def("alert", py::overload_cast<std::string, const char*, const char*>(&cinnamon_py::alert));
-    m.def("log", &utilities::log);
+    m.def("log", py::overload_cast<std::string, LoggingLevel>(&utilities::log));
+    m.def("log", py::overload_cast<std::string, std::string>(&utilities::log));
     m.def("register_mod", &cinnamon_py::register_mod);
     m.attr("base") = utilities::getBase();
     m.attr("gd_path") = utilities::getGDPath();

@@ -5,9 +5,11 @@
 #include <stdio.h>
 #include <iostream>
 #undef _DEBUG
+#undef ERROR
 #include <cocos2d.h>
 #include "MinHook.h"
 #include <tuple>
+#include "globals.h"
 
 namespace py = pybind11;
 
@@ -143,16 +145,38 @@ namespace utilities {
         return path;
     }
 
+    void log(std::string message, LoggingLevel levelInt) {
+        std::string stringmap[] = {
+            "DEBUG",
+            "INFO", 
+            "WARNING",
+            "ERROR",
+            "CRITICAL"
+        };
+
+        std::string level = stringmap[(int)levelInt];
+
+        std::cout << "CINNAMON: " << level << " >> " << message << std::endl;
+    }
+
+    void log(std::string message, std::string level="INFO") {
+        int logLevel = loggingLevelStringToInt(level);
+
+        if ((int)logLevel >= (int)globals::loggingLevel)
+            std::cout << "CINNAMON: " << level << " >> " << message << std::endl;
+    }
+
     void enableDebugMode() {
+        globals::debugMode = true;
+        globals::loggingLevel = LoggingLevel::DEBUG;
+
         AllocConsole();
         FILE* fDummy;
         freopen_s(&fDummy, "CONIN$", "r", stdin);
         freopen_s(&fDummy, "CONOUT$", "w", stderr);
         freopen_s(&fDummy, "CONOUT$", "w", stdout);
-    }
 
-    void log(std::string message, std::string level="INFO") {
-        std::cout << "CINNAMON: " << level << " >> " << message << std::endl;
+        log("Debug mode enabled", "DEBUG");
     }
 
     void hookCinnamon(PVOID address, PVOID hook, LPVOID* original) {
@@ -163,5 +187,9 @@ namespace utilities {
         log("Hooking " + addr, "DEBUG");
         MH_STATUS status = MH_CreateHook(address, hook, original);
         log(std::string("Hooked ") + addr + std::string(" with status ") + std::string(MH_StatusToString(status)), "DEBUG");
+    }
+
+    void setLoggingLevel(LoggingLevel level) {
+        globals::loggingLevel = level;
     }
 }
