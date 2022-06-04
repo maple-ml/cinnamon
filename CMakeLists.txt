@@ -32,7 +32,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   include/pybind11
   include/minhook
   include/minhook/include
-  $ENV{APPDATA}/../Local/Programs/Python/Python39-32/include
+  $ENV{LOCALAPPDATA}/Programs/Python/Python39-32/include
 )
 
 

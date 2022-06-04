@@ -28,7 +28,8 @@ DWORD WINAPI dll_thread(void* hModule) {
     py::scoped_interpreter python;
 
     std::string mod_path = utilities::getGDPath();
-    mod_path.append("mods\\");
+    mod_path.append("cinnamon\\mods\\");
+    py::module_::import("sys").attr("path").attr("append")(mod_path);
 
     utilities::log("Cinnamon Initialized!", "INFO");
 
@@ -44,7 +45,6 @@ DWORD WINAPI dll_thread(void* hModule) {
 
             utilities::log("Running Python file: " + file, "INFO");
 
-            //utilities::runPythonFile(file); // cocos thread
             py::object mod = py::eval_file(file); // non cocos thread
 
             utilities::log("Python file started: " + file, "INFO");
