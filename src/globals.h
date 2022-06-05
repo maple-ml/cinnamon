@@ -28,6 +28,8 @@ int loggingLevelStringToInt(std::string level) {
 
 namespace globals {
     bool debugMode = false;
+    bool startupErrorOccured = false;
+
     LoggingLevel loggingLevel = LoggingLevel::INFO;
 
     std::multimap<std::string, py::function> pyHookmap = std::multimap<std::string, py::function>();

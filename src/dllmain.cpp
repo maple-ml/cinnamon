@@ -15,7 +15,7 @@ USING_NS_CC;
 
 #include "macros.h"
 #include "utilities.h"
-#include "mod_menu.h"
+#include "hooks/mod_menu.h"
 
 // bindings
 #include "bindings/cinnamon.h"
@@ -45,7 +45,15 @@ DWORD WINAPI dll_thread(void* hModule) {
 
             utilities::log("Running Python file: " + file, "INFO");
 
-            py::object mod = py::eval_file(file); // non cocos thread
+            try {
+                py::object mod = py::eval_file(file); // non cocos thread
+            }
+            catch (py::error_already_set& e) {
+                globals::startupErrorOccured = true;
+                py::print("Exception has occured while running python file " + file);
+                py::print(e.what());
+                continue;
+            }
 
             utilities::log("Python file started: " + file, "INFO");
         }

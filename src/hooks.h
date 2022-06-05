@@ -8,8 +8,6 @@
 #include <map>
 #include <string>
 
-#include "geometrydash.h"
-
 namespace hooks {
 	class PythonHook {
 	private:

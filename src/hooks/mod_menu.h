@@ -6,6 +6,8 @@
 #include "scroll_nodes/CustomListView.h"
 #include "layers_scenes_transitions_nodes/GJListLayer.h"
 #include "scroll_nodes/CCScrollLayerExt.h"
+#include "layers_scenes_transitions_nodes/FLAlertLayer.h"
+#include "cinnamon.h"
 
 USING_NS_CC;
 using namespace extension;
@@ -121,8 +123,6 @@ public:
     }
 
     bool init() {
-        std::cout << "layer init\n";
-
         CCSprite* bg = CCSprite::create("GJ_gradientBG.png"); // blue bg
 
         CCSize winSize = CCDirector::sharedDirector()->getWinSize();
@@ -193,12 +193,17 @@ public:
 
 class ModMenu : public CCNode {
 public:
+    void showStartupError(CCNode* sender) {
+        cinnamon::alert("Cinnamon", "An <cr>exception</c> occured while loading a mod.\nEnable <cy>debug</c> mode and check the console for more information.", "Ok", nullptr, 300.0f);
+    }
+
     static void enable_hooks() {
         MH_EnableHook((PVOID)0x1907b0); // MenuLayer::init
     }
 
     static bool MenuLayer_init(CCLayer* self) {
-        std::cout << "menulayer\n";
+        if (globals::startupErrorOccured)
+            CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(ModMenu::showStartupError), self, 0.1f, false, 0, 0.1f);
 
         CCSize window = CCDirector::sharedDirector()->getWinSize();
 
@@ -215,8 +220,6 @@ public:
     }
 
     void onButtonPress(CCObject* sender) {
-        std::cout << "button pressed\n";
-
         ModMenuLayer* modmenu = ModMenuLayer::create();
         CCScene* scene = CCScene::create();
         scene->addChild(modmenu);

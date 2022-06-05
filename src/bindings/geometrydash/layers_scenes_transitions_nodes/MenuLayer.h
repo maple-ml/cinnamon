@@ -2,7 +2,7 @@
 
 #include "utilities.h"
 #include "globals.h"
-#include "mod_menu.h"
+#include "hooks/mod_menu.h"
 
 class MenuLayer : public CCLayer {
 public:

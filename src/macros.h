@@ -53,6 +53,7 @@
             py::gil_scoped_acquire acquire; \
             itr->second(args); \
             py::gil_scoped_release release; \
+            break; \
         } \
     } \
     ret pRet = hook(args); \
@@ -66,6 +67,7 @@
             py::gil_scoped_acquire acquire; \
             itr->second(args); \
             py::gil_scoped_release release; \
+            break; \
         } \
     } \
     hook(args); \

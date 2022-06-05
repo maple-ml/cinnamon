@@ -107,6 +107,15 @@ namespace utilities {
         ));
     }
 
+    void runOnMainDelay(std::function<void()> func, float delay) {
+        auto node = CallOnMainNode::create(func);
+        CCDirector::sharedDirector()->getRunningScene()->runAction(CCSequence::create(
+            CCDelayTime::create(delay),
+            CCCallFunc::create(node, callfunc_selector(CallOnMainNode::onInvoke)),
+            nullptr
+        ));
+    }
+
     void runPythonFile(py::str filename) {
         auto node = CallPythonFileNode::create(filename);
         CCDirector::sharedDirector()->getRunningScene()->runAction(CCSequence::create(
