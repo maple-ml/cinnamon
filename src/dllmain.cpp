@@ -20,6 +20,7 @@ USING_NS_CC;
 // bindings
 #include "bindings/cinnamon.h"
 #include "bindings/geometrydash/geometrydash.h"
+#include "bindings/cocos2d/cocos.h"
 
 DWORD WINAPI dll_thread(void* hModule) {
     utilities::initialize();

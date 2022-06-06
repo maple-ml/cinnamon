@@ -194,7 +194,12 @@ public:
 class ModMenu : public CCNode {
 public:
     void showStartupError(CCNode* sender) {
-        cinnamon::alert("Cinnamon", "An <cr>exception</c> occured while loading a mod.\nEnable <cy>debug</c> mode and check the console for more information.", "Ok", nullptr, 300.0f);
+        cinnamon::alert("Cinnamon",
+        "An <cr>exception</c> occured while loading a mod.\nEnable <cy>debug</c> mode and check the console for more information.",
+        "Ok",
+        nullptr,
+        300.0f
+        );
     }
 
     static void enable_hooks() {

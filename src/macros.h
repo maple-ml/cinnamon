@@ -5,9 +5,21 @@
 #define CINNAMON_NS_BEGIN namespace {
 #define CINNAMON_NS_END }
 
-// codegen
-
 #define CINNAMON_ARGS(...) __VA_ARGS__
+
+// bindings
+
+#define CINNAMON_BIND_GET(cls, name) c.def("get" #name, &cls ## ::get ## name);
+#define CINNAMON_BIND_SET(cls, name) c.def("set" #name, &cls ## ::set ## name);
+
+#define CINNAMON_BIND_SET_CAST(cls, name, types) c.def("set" #name, py::overload_cast<types>(&cls ## ::set ## name));
+
+
+#define CINNAMON_BIND_GETSET(cls, name) CINNAMON_BIND_GET(cls, name); CINNAMON_BIND_SET(cls, name);
+
+#define CINNAMON_BIND_GETSET_CAST(cls, name, types) CINNAMON_BIND_GET(cls, name); CINNAMON_BIND_SET_CAST(cls, name, types);
+
+// codegen
 
 #define CINNAMON_NAME(name, value) static inline const char* name = value;
 
