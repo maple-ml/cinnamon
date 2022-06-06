@@ -15,6 +15,7 @@
 
 // layers_scenes_transitions_nodes
 #include "layers_scenes_transitions_nodes/Scene.h"
+#include "layers_scenes_transitions_nodes/Layer.h"
 
 PYBIND11_EMBEDDED_MODULE(cocos2d, m) { // the suffering begins
     // base nodes
@@ -24,4 +25,5 @@ PYBIND11_EMBEDDED_MODULE(cocos2d, m) { // the suffering begins
     CCCopying_init(m);
     // layers_scenes_transitions_nodes
     CCScene_init(m);
+    CCLayer_init(m);
 }
