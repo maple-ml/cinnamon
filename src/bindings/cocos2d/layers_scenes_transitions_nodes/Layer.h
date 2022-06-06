@@ -15,14 +15,14 @@ void CCLayer_init(py::module &m) {
         c.def("onEnter", &CCLayer::onEnter);
         c.def("onExit", &CCLayer::onExit);
         c.def("onEnterTransitionDidFinish", &CCLayer::onEnterTransitionDidFinish);
-        c.def("CCTouchBegan", &CCLayer::CCTouchBegan);
-        c.def("CCTouchMoved", &CCLayer::CCTouchMoved);
-        c.def("CCTouchEnded", &CCLayer::CCTouchEnded);
-        c.def("CCTouchCancelled", &CCLayer::CCTouchCancelled);
-        c.def("CCTouchesBegan", &CCLayer::CCTouchesBegan);
-        c.def("CCTouchesMoved", &CCLayer::CCTouchesMoved);
-        c.def("CCTouchesEnded", &CCLayer::CCTouchesEnded);
-        c.def("CCTouchesCancelled", &CCLayer::CCTouchesCancelled);
+        c.def("ccTouchBegan", &CCLayer::ccTouchBegan);
+        c.def("ccTouchMoved", &CCLayer::ccTouchMoved);
+        c.def("ccTouchEnded", &CCLayer::ccTouchEnded);
+        c.def("ccTouchCancelled", &CCLayer::ccTouchCancelled);
+        c.def("ccTouchesBegan", &CCLayer::ccTouchesBegan);
+        c.def("ccTouchesMoved", &CCLayer::ccTouchesMoved);
+        c.def("ccTouchesEnded", &CCLayer::ccTouchesEnded);
+        c.def("ccTouchesCancelled", &CCLayer::ccTouchesCancelled);
         c.def("didAccelerate", &CCLayer::didAccelerate);
         c.def("registerScriptAccelerateHandler", &CCLayer::registerScriptAccelerateHandler);
         c.def("unregisterScriptAccelerateHandler", &CCLayer::unregisterScriptAccelerateHandler);
@@ -41,13 +41,10 @@ void CCLayer_init(py::module &m) {
         c.def("isKeyboardEnabled", &CCLayer::isKeyboardEnabled);
         CINNAMON_BIND_SET(CCLayer, KeyboardEnabled);
         c.def("isMouseEnabled", &CCLayer::isMouseEnabled);
-        CINNAMON_BIND_SET(CCLayer, isMouseEnabled);
+        CINNAMON_BIND_SET(CCLayer, MouseEnabled);
         c.def("registerScriptKeypadHandler", &CCLayer::registerScriptKeypadHandler);
         c.def("unregisterScriptKeypadHandler", &CCLayer::unregisterScriptKeypadHandler);
         c.def("keyBackClicked", &CCLayer::keyBackClicked);
         c.def("keyMenuClicked", &CCLayer::keyMenuClicked);
         c.def("keyDown", &CCLayer::keyDown);
-        c.def("getScriptTouchHandlerEntry", &CCLayer::getScriptTouchHandlerEntry);
-        c.def("getScriptKeypadHandlerEntry", &CCLayer::getScriptKeypadHandlerEntry);
-        c.def("getScriptAccelerateHandlerEntry", &CCLayer::getScriptAccelerateHandlerEntry);
 }
