@@ -24,6 +24,7 @@
 #include "sprite_nodes/PlayerObject.h"
 
 PYBIND11_EMBEDDED_MODULE(geometrydash, m) {
+    py::module_::import("cocos2d"); // for base classes
 
     FLAlertLayer_init(m);
     MenuLayer_init(m);

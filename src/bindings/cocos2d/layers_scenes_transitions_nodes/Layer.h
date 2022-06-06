@@ -8,8 +8,9 @@ namespace py = pybind11;
 USING_NS_CC;
 
 void CCLayer_init(py::module &m) {
-    auto c = py::class_<CCLayer>(m, "CCLayer");
-        c.def("__init__", &CCLayer::create);
+    // more base classes: CCTouchDelegate, CCAccelerometerDelegate, CCKeypadDelegate, CCKeyboardDelegate, CCMouseDelegate
+    auto c = py::class_<CCLayer, CCNode>(m, "CCLayer");
+        c.def(py::init(&CCLayer::create));
         c.def("create", &CCLayer::create);
         c.def("init", &CCLayer::init);
         c.def("onEnter", &CCLayer::onEnter);

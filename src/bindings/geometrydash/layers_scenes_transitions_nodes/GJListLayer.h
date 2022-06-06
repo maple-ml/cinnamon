@@ -4,6 +4,7 @@
 
 #include "utilities.h"
 #include "globals.h"
+#include "scroll_nodes/BoomListView.h"
 
 class GJListLayer : public CCLayerColor {
 public:

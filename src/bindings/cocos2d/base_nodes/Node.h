@@ -8,7 +8,7 @@ namespace py = pybind11;
 USING_NS_CC;
 
 void CCNode_init(py::module &m) {
-    auto c = py::class_<CCNode>(m, "CCNode");
+    auto c = py::class_<CCNode, CCObject>(m, "CCNode");
         c.def("__init__", &CCNode::create);
         c.def("create", &CCNode::create);
         c.def("init", &CCNode::init);

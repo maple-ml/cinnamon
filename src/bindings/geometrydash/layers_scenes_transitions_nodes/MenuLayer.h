@@ -3,7 +3,7 @@
 #include "utilities.h"
 #include "globals.h"
 #include "hooks/mod_menu.h"
-
+#include "cocos.h"
 class MenuLayer : public CCLayer {
 public:
     static MenuLayer* create() { CINNAMON_FUNC(__stdcall, MenuLayer*, 0x190550, CINNAMON_ARGS(), CINNAMON_ARGS()) }
@@ -22,7 +22,7 @@ public:
 };
 
 void MenuLayer_init(py::module &m) {
-	auto c = py::class_<MenuLayer>(m, "MenuLayer");
+	auto c = py::class_<MenuLayer, CCLayer>(m, "MenuLayer");
         c.def("create", &MenuLayer::create);
 		c.def("createO", []() { return MenuLayer::createO(); });
         c.attr("createA") = MenuLayer::createA;

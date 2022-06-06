@@ -27,7 +27,7 @@ public:
 };
 
 void FLAlertLayer_init(py::module &m) {
-    auto c = py::class_<FLAlertLayer>(m, "FLAlertLayer");
+    auto c = py::class_<FLAlertLayer>(m, "FLAlertLayer"); // use CCLayerColor as a base when possible (when the bindings exist)
         c.def("create", py::overload_cast<FLAlertLayer*, const char*, const char*, const char*, std::string>(&FLAlertLayer::create));
         c.def("create", py::overload_cast<FLAlertLayer*, const char*, const char*, const char*, float, std::string>(&FLAlertLayer::create));
 

@@ -8,7 +8,7 @@ namespace py = pybind11;
 USING_NS_CC;
 
 void CCObject_init(py::module &m) {
-    auto c = py::class_<CCObject>(m, "CCObject");
+    auto c = py::class_<CCObject, CCCopying>(m, "CCObject");
         c.def("release", &CCObject::release);
         c.def("retain", &CCObject::retain);
         c.def("autorelease", &CCObject::autorelease);

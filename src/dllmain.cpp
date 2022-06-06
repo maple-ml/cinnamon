@@ -13,14 +13,14 @@
 namespace py = pybind11;
 USING_NS_CC;
 
+// bindings
+#include "bindings/cocos2d/cocos.h"
+#include "bindings/geometrydash/geometrydash.h"
+#include "bindings/cinnamon.h"
+
 #include "macros.h"
 #include "utilities.h"
 #include "hooks/mod_menu.h"
-
-// bindings
-#include "bindings/cinnamon.h"
-#include "bindings/geometrydash/geometrydash.h"
-#include "bindings/cocos2d/cocos.h"
 
 DWORD WINAPI dll_thread(void* hModule) {
     utilities::initialize();
@@ -51,7 +51,7 @@ DWORD WINAPI dll_thread(void* hModule) {
             }
             catch (py::error_already_set& e) {
                 globals::startupErrorOccured = true;
-                py::print("Exception has occured while running python file " + file);
+                py::print("Exception has occured while running python file: " + file);
                 py::print(e.what());
                 continue;
             }

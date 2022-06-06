@@ -17,13 +17,17 @@
 #include "layers_scenes_transitions_nodes/Scene.h"
 #include "layers_scenes_transitions_nodes/Layer.h"
 
+// sprite_nodes
+#include "sprite_nodes/Sprite.h"
+
 PYBIND11_EMBEDDED_MODULE(cocos2d, m) { // the suffering begins
-    // base nodes
-    CCNode_init(m);
-    // cocoa
-    CCObject_init(m);
     CCCopying_init(m);
-    // layers_scenes_transitions_nodes
+    CCObject_init(m);
+
+    CCNode_init(m);
+
     CCScene_init(m);
     CCLayer_init(m);
+
+    CCSprite_init(m);
 }
