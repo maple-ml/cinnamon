@@ -1,7 +1,12 @@
 #pragma once
-#include <cocos2d.h>
+#include "cocos2d.h"
 
-class CCMenuItemSpriteExtra : public cocos2d::CCMenuItemSprite{
+#include "hooks.h"
+#include "globals.h"
+#include "utilities.h"
+#include "macros.h"
+
+class CCMenuItemSpriteExtra : public CCMenuItemSprite {
 private:
 	float m_sizeMult = 1.25;
 	float m_origScale = 1.f;
@@ -39,3 +44,13 @@ public:
 	}
 	void setSizeMult(float multiplier) { m_sizeMult = multiplier; }
 };
+
+void CCMenuItemSpriteExtra_init(py::module &m) {
+	auto c = py::class_<CCMenuItemSpriteExtra, CCMenuItemSprite>(m, "CCMenuItemSpriteExtra");
+		c.def("selected", &CCMenuItemSpriteExtra::selected);
+		c.def("unselected", &CCMenuItemSpriteExtra::unselected);
+		c.def("activate", &CCMenuItemSpriteExtra::activate);
+		c.def("setScale", &CCMenuItemSpriteExtra::setScale);
+		c.def("create", &CCMenuItemSpriteExtra::create);
+		c.def("setSizeMult", &CCMenuItemSpriteExtra::setSizeMult);
+}

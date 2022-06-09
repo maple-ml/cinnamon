@@ -10,7 +10,7 @@
 #include "layers_scenes_transitions_nodes/MenuLayer.h"
 
 // menu_nodes
-#include "menu_nodes/CCMenuItemSpriteExtra.h" // no bindings yet
+#include "menu_nodes/CCMenuItemSpriteExtra.h"
 
 // scroll_nodes
 #include "scroll_nodes/BoomListView.h" // no bindings yet
@@ -24,10 +24,16 @@
 #include "sprite_nodes/PlayerObject.h"
 
 PYBIND11_EMBEDDED_MODULE(geometrydash, m) {
+    utilities::log("Binding geometrydash", "DEBUG");
+
     py::module_::import("cocos2d"); // for base classes
 
     FLAlertLayer_init(m);
     MenuLayer_init(m);
 
+    CCMenuItemSpriteExtra_init(m);
+
     PlayerObject_init(m);
+
+    utilities::log("Binded geometrydash", "DEBUG");
 }

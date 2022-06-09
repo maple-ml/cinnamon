@@ -11,10 +11,15 @@ env:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
+    - uses: ilammy/msvc-dev-cmd@v1
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        architecture: 'x86'
 
     - name: Configure CMake
       run: cmake -G "Visual Studio 16 2019" -A Win32 -S . -B "build32"

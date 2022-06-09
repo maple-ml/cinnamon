@@ -201,4 +201,16 @@ namespace utilities {
     void setLoggingLevel(LoggingLevel level) {
         globals::loggingLevel = level;
     }
+
+    void runWithExceptionHandler(std::function<void()> func) {
+        try {
+            func();
+        }
+        catch (py::error_already_set& e) {
+            log(std::string("Exception: ") + e.what(), "ERROR");
+        }
+        catch (...) {
+            log("Unknown exception", "ERROR");
+        }
+    }
 }

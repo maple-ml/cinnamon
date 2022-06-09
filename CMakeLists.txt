@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_CXX_STANDARD 17)
 project(cinnamon CXX)
 
-file(GLOB SOURCES src/*.cpp include/cocos2dx/robtop/CCMenuItemSpriteExtra.cpp)
+file(GLOB SOURCES src/*.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
 set(CMAKE_SIZEOF_VOID_P 4)
@@ -15,6 +15,12 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
 endif()
 
 add_library(cocos2d INTERFACE)
+
+if(DEFINED ENV{PYTHON_PATH})
+  set(PYTHON_PATH "${ENV{PYTHON_PATH}}")
+else()
+  set(PYTHON_PATH "$ENV{LOCALAPPDATA}/Programs/Python/Python39-32/")
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
   src
@@ -32,7 +38,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   include/pybind11
   include/minhook
   include/minhook/include
-  $ENV{LOCALAPPDATA}/Programs/Python/Python39-32/include
+  ${PYTHON_PATH}/include
 )
 
 
@@ -40,5 +46,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/include/cocos2dx/libcocos2d.lib
   ${CMAKE_CURRENT_LIST_DIR}/include/extensions/libExtensions.lib
   ${CMAKE_CURRENT_LIST_DIR}/include/minhook/Release/minhook.x32.lib
-  $ENV{APPDATA}/../Local/Programs/Python/Python39-32/libs/python39.lib
+  ${PYTHON_PATH}/libs/python39.lib
 )

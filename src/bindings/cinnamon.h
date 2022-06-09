@@ -72,6 +72,8 @@ namespace cinnamon {
 }
 
 PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
+    utilities::log("Binding cinnamon", "DEBUG");
+
     m.def("run", &utilities::runPyOnMain); // broken atm
     m.def("enable_debug", &utilities::enableDebugMode);
     m.def("hook", &hooks::hookPython); // hooks a direct address
@@ -88,4 +90,6 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
         c.def(py::init<>());
         c.def("_init", &cinnamon::Mod::_init);
         c.def("loop", &cinnamon::Mod::loop);
+
+    utilities::log("Binded cinnamon", "DEBUG");
 }
