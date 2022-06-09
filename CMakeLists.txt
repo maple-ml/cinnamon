@@ -22,6 +22,8 @@ else()
   set(PYTHON_PATH "$ENV{LOCALAPPDATA}/Programs/Python/Python39-32/")
 endif()
 
+message(STATUS, ${CMAKE_CURRENT_LIST_DIR})
+
 target_include_directories(${PROJECT_NAME} PRIVATE
   src
   src/bindings
