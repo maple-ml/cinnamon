@@ -31,6 +31,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   include/cocos2dx
   include/cocos2dx/include
   include/cocos2dx/kazmath/include
+  include/cocos2dx/platform
   include/cocos2dx/platform/win32
   include/cocos2dx/platform/third_party/win32
   include/cocos2dx/platform/third_party/win32/OGLES
