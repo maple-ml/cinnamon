@@ -36,6 +36,7 @@ PYBIND11_EMBEDDED_MODULE(cocos2d, m) { // the suffering begins
     utilities::log("Binding cocos2d", "DEBUG");
 
     //m.def("menu_selector", [](void* selector) { (SEL_MenuHandler)(&selector); });
+    m.def("ccp", [](float x, float y) { return CCPoint(x, y); } );
 
     CCCopying_init(m);
     CCObject_init(m);
