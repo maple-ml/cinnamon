@@ -9,6 +9,7 @@ USING_NS_CC;
 
 void CCMenuItemSprite_init(py::module &m) {
     auto c = py::class_<CCMenuItemSprite, CCMenuItem>(m, "CCMenuItemSprite");
+        /* // no one even uses this class
         c.def(py::init([](CCNode* normalSprite, CCNode* selectedSprite, CCNode* disabledSprite) {
             return CCMenuItemSprite::create(normalSprite, selectedSprite, disabledSprite);
         }));
@@ -21,6 +22,7 @@ void CCMenuItemSprite_init(py::module &m) {
         c.def("create", py::overload_cast<CCNode*, CCNode*, CCNode*>(&CCMenuItemSprite::create));
         c.def("create", py::overload_cast<CCNode*, CCNode*, CCObject*, SEL_MenuHandler>(&CCMenuItemSprite::create));
         c.def("create", py::overload_cast<CCNode*, CCNode*, CCNode*, CCObject*, SEL_MenuHandler>(&CCMenuItemSprite::create));
+        */
         c.def("initWithNormalSprite", &CCMenuItemSprite::initWithNormalSprite);
         c.def("selected", &CCMenuItemSprite::selected);
         c.def("unselected", &CCMenuItemSprite::unselected);

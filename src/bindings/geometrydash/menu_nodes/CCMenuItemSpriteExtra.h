@@ -45,12 +45,16 @@ public:
 	void setSizeMult(float multiplier) { m_sizeMult = multiplier; }
 };
 
+
 void CCMenuItemSpriteExtra_init(py::module &m) {
 	auto c = py::class_<CCMenuItemSpriteExtra, CCMenuItemSprite>(m, "CCMenuItemSpriteExtra");
 		c.def("selected", &CCMenuItemSpriteExtra::selected);
 		c.def("unselected", &CCMenuItemSpriteExtra::unselected);
 		c.def("activate", &CCMenuItemSpriteExtra::activate);
-		c.def("setScale", &CCMenuItemSpriteExtra::setScale);
-		c.def("create", &CCMenuItemSpriteExtra::create);
-		c.def("setSizeMult", &CCMenuItemSpriteExtra::setSizeMult);
+		CINNAMON_BIND_SET(CCMenuItemSpriteExtra, Scale);
+		// TODO, BUG: make this somehow return a value
+		c.def("create", [](CCNode *normalSprite, CCNode *selectedSprite, CCObject *target, cocos2d::SEL_MenuHandler selector) {
+			CCMenuItemSpriteExtra::create(normalSprite, selectedSprite, target, selector);
+		});
+		CINNAMON_BIND_SET(CCMenuItemSpriteExtra, SizeMult);
 }
