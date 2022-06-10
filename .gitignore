@@ -51,14 +51,14 @@ mono_crash.*
 
 # Build results
 #[Dd]ebug/
-[Dd]ebugPublic/
+#[Dd]ebugPublic/
 #[Rr]elease/
-[Rr]eleases/
+#[Rr]eleases/
 #x64/
 #x86/
 #[Ww][Ii][Nn]32/ # this breaks cocos2d, this took so long to figure out why
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
+#[Aa][Rr][Mm]/
+#[Aa][Rr][Mm]64/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -74,7 +74,7 @@ bld/
 Generated\ Files/
 
 # MSTest test Results
-[Tt]est[Rr]esult*/
+#[Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
 # NUnit
@@ -83,8 +83,8 @@ TestResult.xml
 nunit-*.xml
 
 # Build Results of an ATL Project
-[Dd]ebugPS/
-[Rr]eleasePS/
+#[Dd]ebugPS/
+#[Rr]eleasePS/
 dlldata.c
 
 # Benchmark Results

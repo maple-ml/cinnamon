@@ -46,11 +46,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 target_link_libraries(${PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/include/cocos2dx/libcocos2d.lib
   ${CMAKE_CURRENT_LIST_DIR}/include/extensions/libExtensions.lib
-  ${CMAKE_CURRENT_LIST_DIR}/include/minhook/Release/minhook.x32.lib
+  ${CMAKE_CURRENT_LIST_DIR}/include/minhook/minhook.x32.lib
   ${PYTHON_PATH}/libs/python39.lib
 )
-
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-  message(STATUS "dir='${dir}'")
-endforeach()
