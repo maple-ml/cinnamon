@@ -43,7 +43,9 @@ cd cinnamon
 If using [maple-cli](https://github.com/maple-ml/cli), all you have to do is run `maple build` in the directory of cinnamon. The optional flags for this command are as follows:
 
 `--quiet`: Tries to make the build quieter
+
 `--run`: Attempts to run Geometry Dash after build has finished, great for debugging (`GDPATH` must be defined)
+
 `--copy`: If the build succeeds, copies the generated dll to the `Geometry Dash/mods` directory (`GDPATH` must be defined)
 
 `GDPATH` can be defined via environment variable (`%GDPATH%`) or the command line argument `--path GDPATH`
