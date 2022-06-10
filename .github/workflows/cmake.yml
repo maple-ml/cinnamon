@@ -26,3 +26,9 @@ jobs:
 
     - name: Build
       run: cmake --build build32 --config ${{env.BUILD_TYPE}}
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Cinnamon Build
+        path: ./build32/
