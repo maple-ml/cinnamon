@@ -24,5 +24,8 @@ jobs:
     - name: Configure CMake
       run: cmake -G "Visual Studio 17 2022" -T host=x86 -A Win32 -S . -B "build32"
 
+    - name: DEBUG
+      run: dir
+
     - name: Build
       run: cmake --build build32 --config ${{env.BUILD_TYPE}}
