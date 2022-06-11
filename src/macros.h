@@ -1,5 +1,13 @@
 #pragma once
 
+#include <cctype>
+
+// helpers
+
+#define FIRST_CHAR_TO_LOWER(ident, str) std::string ident ## _ = #str; ident ## _[0] = tolower(ident ## _[0]); const char* ident = ident ## _.c_str()
+
+// general
+
 #define USING_NS_CINNAMON using namespace cinnamon;
 
 #define CINNAMON_NS_BEGIN namespace {
@@ -9,15 +17,20 @@
 
 // bindings
 
-#define CINNAMON_BIND_GET(cls, name) c.def("get" #name, &cls ## ::get ## name);
-#define CINNAMON_BIND_SET(cls, name) c.def("set" #name, &cls ## ::set ## name);
+#define CINNAMON_BIND_GET(cls, name) c.def("get" #name, &cls ## ::get ## name); FIRST_CHAR_TO_LOWER(name ## Get_, name); c.def_property_readonly(name ## Get_, &cls :: get ## name);
+#define CINNAMON_BIND_SET(cls, name) c.def("set" #name, &cls ## ::set ## name); FIRST_CHAR_TO_LOWER(name ## Set_, name); c.def_property(name ## Set_, nullptr, &cls :: set ## name);
 
-#define CINNAMON_BIND_SET_CAST(cls, name, types) c.def("set" #name, py::overload_cast<types>(&cls ## ::set ## name));
+#define CINNAMON_BIND_GET_NOPROP(cls, name) c.def("get" #name, &cls ## ::get ## name);
+#define CINNAMON_BIND_SET_NOPROP(cls, name) c.def("set" #name, &cls ## ::set ## name);
+
+#define CINNAMON_BIND_SET_CAST(cls, name, types) c.def("set" #name, py::overload_cast<types>(&cls ## ::set ## name)); FIRST_CHAR_TO_LOWER(name ## Set_, name); c.def_property(name ## Set_, &cls :: get ## name, &cls :: set ## name);
+
+#define CINNAMON_BIND_SET_CAST_NOPROP(cls, name, types) c.def("set" #name, py::overload_cast<types>(&cls ## ::set ## name));
 
 
-#define CINNAMON_BIND_GETSET(cls, name) CINNAMON_BIND_GET(cls, name); CINNAMON_BIND_SET(cls, name);
+#define CINNAMON_BIND_GETSET(cls, name) CINNAMON_BIND_GET_NOPROP(cls, name); CINNAMON_BIND_SET_NOPROP(cls, name); FIRST_CHAR_TO_LOWER(name ## GetSet_, name); c.def_property(name ## GetSet_, &cls :: get ## name, &cls :: set ## name);
 
-#define CINNAMON_BIND_GETSET_CAST(cls, name, types) CINNAMON_BIND_GET(cls, name); CINNAMON_BIND_SET_CAST(cls, name, types);
+#define CINNAMON_BIND_GETSET_CAST(cls, name, types) CINNAMON_BIND_GET_NOPROP(cls, name); CINNAMON_BIND_SET_CAST(cls, name, types);
 
 // codegen
 
@@ -91,6 +104,7 @@ static ret __fastcall name(types) { \
     int itr2 = 0; \
     for (itr = globals::pyHookmap.begin(); itr != globals::pyHookmap.end(); ++itr) { \
         if (globals::pyHookmap.count(hookname) == name2) { \
+            std::cout << "calling origianl!!!!" << std::endl; \
             ret pRet = original(args); \
             name2 = 1; \
             return pRet; \

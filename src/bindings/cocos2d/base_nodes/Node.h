@@ -9,10 +9,8 @@ USING_NS_CC;
 
 void CCNode_init(py::module &m) {
     auto c = py::class_<CCNode, CCObject>(m, "CCNode");
-        // members
-        c.def_property("position", py::overload_cast<>(&CCNode::getPosition), py::overload_cast<const CCPoint&>(&CCNode::setPosition));
         // functions
-        c.def("__init__", &CCNode::create);
+        c.def(py::init<>(&CCNode::create));
         c.def("create", &CCNode::create);
         c.def("init", &CCNode::init);
         c.def("description", &CCNode::description);
