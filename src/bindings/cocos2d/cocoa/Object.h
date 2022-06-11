@@ -18,5 +18,5 @@ void CCObject_init(py::module &m) {
         c.def("isEqual", &CCObject::isEqual);
         c.def("update", &CCObject::update);
         CINNAMON_BIND_GETSET(CCObject, Tag);
-        c.def("setObjType", &CCObject::setObjType);
+        CINNAMON_BIND_SET(CCObject, ObjType);
 }

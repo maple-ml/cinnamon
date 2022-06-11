@@ -9,7 +9,6 @@ USING_NS_CC;
 
 void CCNode_init(py::module &m) {
     auto c = py::class_<CCNode, CCObject>(m, "CCNode");
-        // functions
         c.def(py::init<>(&CCNode::create));
         c.def("create", &CCNode::create);
         c.def("init", &CCNode::init);
@@ -22,9 +21,11 @@ void CCNode_init(py::module &m) {
         c.def("getScale", py::overload_cast<>(&CCNode::getScale));
         c.def("setScale", py::overload_cast<float>(&CCNode::setScale));
         c.def("setScale", py::overload_cast<float, float>(&CCNode::setScale));
+        c.def_property("scale", py::overload_cast<>(&CCNode::getScale), py::overload_cast<float>(&CCNode::setScale));
         c.def("getPosition", py::overload_cast<>(&CCNode::getPosition));
         c.def("setPosition", py::overload_cast<const CCPoint&>(&CCNode::setPosition));
         c.def("setPosition", py::overload_cast<float, float>(&CCNode::setPosition));
+        c.def_property("position", py::overload_cast<>(&CCNode::getPosition), py::overload_cast<const CCPoint&>(&CCNode::setPosition));
         CINNAMON_BIND_GETSET(CCNode, PositionX);
         CINNAMON_BIND_GETSET(CCNode, PositionY);
         CINNAMON_BIND_GETSET(CCNode, SkewX);
