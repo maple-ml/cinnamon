@@ -432,3 +432,4 @@ FodyWeavers.xsd
 out/
 
 build32/
+CMakeCache.txt
