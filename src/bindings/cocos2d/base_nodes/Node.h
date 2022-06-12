@@ -48,7 +48,9 @@ void CCNode_init(py::module &m) {
         c.def("addChild", py::overload_cast<CCNode*, int, int>(&CCNode::addChild));
         c.def("getChildByTag", &CCNode::getChildByTag);
         c.def("getChildren", &CCNode::getChildren);
+        c.def_property("children", &CCNode::getChildren, nullptr);
         c.def("getChildrenCount", &CCNode::getChildrenCount);
+        c.def_property("childrenCouunt", &CCNode::getChildrenCount, nullptr);
         CINNAMON_BIND_GETSET(CCNode, Parent);
         c.def("removeFromParent", &CCNode::removeFromParent);
         c.def("removeFromParentAndCleanup", &CCNode::removeFromParentAndCleanup);
