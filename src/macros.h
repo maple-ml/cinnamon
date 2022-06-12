@@ -104,7 +104,6 @@ static ret __fastcall name(types) { \
     int itr2 = 0; \
     for (itr = globals::pyHookmap.begin(); itr != globals::pyHookmap.end(); ++itr) { \
         if (globals::pyHookmap.count(hookname) == name2) { \
-            std::cout << "calling origianl!!!!" << std::endl; \
             ret pRet = original(args); \
             name2 = 1; \
             return pRet; \
