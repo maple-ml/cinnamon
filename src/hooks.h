@@ -15,17 +15,13 @@ public:
 	std::string m_functionname;
 	size_t m_address;
 	py::function m_detour;
-	bool m_enabled;
 
-	PythonHook() {
-		m_enabled = false;
-	}
+	PythonHook()
 
 	PythonHook(std::string functionname, size_t address, py::function detour) {
 		m_functionname = functionname;
 		m_address = address;
 		m_detour = detour;
-		m_enabled = false;
 		
 		globals::pyHookmap.insert(std::pair<std::string, py::function>(functionname, detour));
 
