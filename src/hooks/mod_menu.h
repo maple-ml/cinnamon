@@ -221,7 +221,7 @@ public:
         CCMenuItemSpriteExtra* btn = CCMenuItemSpriteExtra::create(CCSprite::create("GJ_button_01.png"), nullptr, self, menu_selector(onButtonPress));
 
         CCMenuItem* chest = (CCMenuItem*)(bottomMenu->getChildren()->objectAtIndex(4));
-        
+
         if (chest) { // so it doesn't get in the way of the bottom menu, no cleanup so it doens't move
             chest->retain();
             chest->removeFromParent();
@@ -229,6 +229,11 @@ public:
 
         bottomMenu->addChild(btn);
         bottomMenu->alignItemsHorizontallyWithPadding(5.0f);
+
+        if (chest) {
+			bottomMenu->addChild(chest);
+			chest->release();
+		}
 
         return true;
     }
