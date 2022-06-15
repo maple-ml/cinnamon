@@ -98,7 +98,6 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
         c2.def_readwrite("functionname", &cinnamon::PythonHook::m_functionname);
         c2.def_readwrite("address", &cinnamon::PythonHook::m_address);
         c2.def_readwrite("detour", &cinnamon::PythonHook::m_detour);
-        c2.def_readwrite("enabled", &cinnamon::PythonHook::m_enabled);
 
     utilities::log("Binded cinnamon", "DEBUG");
 }

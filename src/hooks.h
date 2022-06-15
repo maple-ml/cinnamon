@@ -16,7 +16,7 @@ public:
 	size_t m_address;
 	py::function m_detour;
 
-	PythonHook()
+	PythonHook() {}
 
 	PythonHook(std::string functionname, size_t address, py::function detour) {
 		m_functionname = functionname;
