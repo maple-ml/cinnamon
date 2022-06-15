@@ -210,13 +210,22 @@ public:
         if (globals::startupErrorOccured)
             CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(ModMenu::showStartupError), self, 0.1f, false, 0, 0.1f);
 
-        CCSize window = CCDirector::sharedDirector()->getWinSize();
 
-        CCMenu* bottomMenu = (CCMenu*)self->getChildren()->objectAtIndex(3);
+		if (GameManager::sharedState()->m_clickedGarage) {
+			CCMenu* bottomMenu = (CCMenu*)self->getChildren()->objectAtIndex(3);
+		}
+		else {
+			CCMenu* bottomMenu = (CCMenu*)self->getChildren()->objectAtIndex(4);
+		}
+
         CCMenuItemSpriteExtra* btn = CCMenuItemSpriteExtra::create(CCSprite::create("GJ_button_01.png"), nullptr, self, menu_selector(onButtonPress));
 
-        CCMenuItem* chestBtn = (CCMenuItem*)(bottomMenu->getChildren()->objectAtIndex(4));
-        bottomMenu->removeChild(chestBtn, false); // so it doesn't get in the way of the bottom menu, no cleanup so it doens't move
+        CCMenuItem* chest = (CCMenuItem*)(bottomMenu->getChildren()->objectAtIndex(4));
+        
+        if (chest) { // so it doesn't get in the way of the bottom menu, no cleanup so it doens't move
+            chest->retain();
+            chest->removeFromParent();
+        }
 
         bottomMenu->addChild(btn);
         bottomMenu->alignItemsHorizontallyWithPadding(5.0f);
