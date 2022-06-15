@@ -188,7 +188,7 @@ namespace utilities {
         log("Debug mode enabled", "DEBUG");
     }
 
-    void hookCinnamon(PVOID address, PVOID hook, LPVOID* original) {
+    MH_STATUS hookCinnamon(PVOID address, PVOID hook, LPVOID* original) {
         std::stringstream addr_stream;
         addr_stream << std::hex << address;
         std::string addr( addr_stream.str() );
@@ -196,6 +196,7 @@ namespace utilities {
         log("Hooking " + addr + ": " + std::to_string((unsigned int)(address)), "DEBUG");
         MH_STATUS status = MH_CreateHook(address, hook, original);
         log(std::string("Hooked ") + addr + std::string(" with status ") + std::string(MH_StatusToString(status)), "DEBUG");
+        return status;
     }
 
     void setLoggingLevel(LoggingLevel level) {

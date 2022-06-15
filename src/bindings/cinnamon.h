@@ -95,8 +95,6 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
 
     auto c2 = py::class_<cinnamon::PythonHook>(m, "Hook");
         c2.def(py::init<>());
-        c2.def("enable", &cinnamon::PythonHook::enable);
-        c2.def("disable", &cinnamon::PythonHook::disable);
         c2.def_readwrite("functionname", &cinnamon::PythonHook::m_functionname);
         c2.def_readwrite("address", &cinnamon::PythonHook::m_address);
         c2.def_readwrite("detour", &cinnamon::PythonHook::m_detour);

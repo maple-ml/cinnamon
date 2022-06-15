@@ -38,10 +38,6 @@
 
 #define CINNAMON_ORIGINAL(name, ret, args) static inline ret(__thiscall* name)(args);
 
-//#define CINNAMON_HOOK_OVERLOAD_STATIC(name, hookname, addr) static inline std::pair<std::string, size_t> name(py::function hook) { \
-//    return std::pair<std::string, size_t>(hookname, addr); \
-//}
-
 #define CINNAMON_HOOK_OVERLOAD(name, hookname, addr) static inline std::pair<std::string, size_t> name(py::function hook) { \
     return std::pair<std::string, size_t>(hookname, addr); \
 }

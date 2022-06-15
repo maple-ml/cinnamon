@@ -28,23 +28,13 @@ public:
 		m_enabled = false;
 		
 		globals::pyHookmap.insert(std::pair<std::string, py::function>(functionname, detour));
-	}
 
-	void enable() {
-		MH_EnableHook((PVOID)m_address);
-		m_enabled = true;
-	}
-
-	void disable() {
-		MH_DisableHook((PVOID)m_address);
-		m_enabled = false;
+		MH_EnableHook(MH_ALL_HOOKS); // fuck it
 	}
 };
 
 PythonHook hookPython(std::string functionname, size_t address, py::function detour) {
-	PythonHook hook = PythonHook(functionname, address, detour);
-	hook.enable();
-	return hook;
+	return PythonHook(functionname, address, detour);;
 }
 
 PythonHook hookPython(py::function toHook, py::function detour) {
@@ -53,9 +43,7 @@ PythonHook hookPython(py::function toHook, py::function detour) {
 	std::string functionname = ret.first;
 	size_t address = ret.second;
 
-	PythonHook hook = PythonHook(functionname, address, detour);
-	hook.enable();
-	return hook;
+	return PythonHook(functionname, address, detour);;
 }
 
 }
