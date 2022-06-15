@@ -32,6 +32,20 @@
 // sprite_nodes
 #include "sprite_nodes/Sprite.h"
 
+
+// TODO: bind
+template<class T = cocos2d::CCNode*>
+static T getChild(cocos2d::CCNode* x, int i) {
+    // start from end for negative index
+    if (i < 0) i = x->getChildrenCount() + i;
+    // check if backwards index is out of bounds
+    if (i < 0) return nullptr;
+    // check if forwards index is out of bounds
+    if (static_cast<int>(x->getChildrenCount()) <= i) return nullptr;
+    return reinterpret_cast<T>(x->getChildren()->objectAtIndex(i));
+}
+
+
 PYBIND11_EMBEDDED_MODULE(cocos2d, m) { // the suffering begins
     utilities::log("Binding cocos2d", "DEBUG");
 
