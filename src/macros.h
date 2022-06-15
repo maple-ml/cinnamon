@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cctype>
+#include "hooks.h"
 
 // helpers
 
@@ -9,9 +10,6 @@
 // general
 
 #define USING_NS_CINNAMON using namespace cinnamon;
-
-#define CINNAMON_NS_BEGIN namespace {
-#define CINNAMON_NS_END }
 
 #define CINNAMON_ARGS(...) __VA_ARGS__
 
@@ -39,6 +37,14 @@
 #define CINNAMON_ADDRESS(name, addr) static inline size_t name = utilities::getBase() + addr;
 
 #define CINNAMON_ORIGINAL(name, ret, args) static inline ret(__thiscall* name)(args);
+
+//#define CINNAMON_HOOK_OVERLOAD_STATIC(name, hookname, addr) static inline std::pair<std::string, size_t> name(py::function hook) { \
+//    return std::pair<std::string, size_t>(hookname, addr); \
+//}
+
+#define CINNAMON_HOOK_OVERLOAD(name, hookname, addr) static inline std::pair<std::string, size_t> name(py::function hook) { \
+    return std::pair<std::string, size_t>(hookname, addr); \
+}
 
 #define CINNAMON_FUNC(call, ret, addr, types, args) return reinterpret_cast<ret(call*)(types)>(utilities::getBase() + addr)(args);
 #define CINNAMON_FUNC_STACK_FIX(stack, call, ret, addr, types, args) ret pRet = reinterpret_cast<ret(call*)(types)>(utilities::getBase() + addr)(args); __asm add esp, stack; return pRet;

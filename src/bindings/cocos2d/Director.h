@@ -9,6 +9,7 @@ USING_NS_CC;
 
 void CCDirector_init(py::module &m) {
     auto c = py::class_<CCDirector, CCObject>(m, "CCDirector");
+        c.def(py::init(&CCDirector::sharedDirector));
         c.def("init", &CCDirector::init);
         c.def("getClassTypeInfo", &CCDirector::getClassTypeInfo);
         c.def("getRunningScene", &CCDirector::getRunningScene);

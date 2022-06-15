@@ -193,7 +193,7 @@ namespace utilities {
         addr_stream << std::hex << address;
         std::string addr( addr_stream.str() );
 
-        log("Hooking " + addr, "DEBUG");
+        log("Hooking " + addr + ": " + std::to_string((unsigned int)(address)), "DEBUG");
         MH_STATUS status = MH_CreateHook(address, hook, original);
         log(std::string("Hooked ") + addr + std::string(" with status ") + std::string(MH_StatusToString(status)), "DEBUG");
     }
