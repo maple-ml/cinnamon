@@ -4,7 +4,7 @@ import cinnamon
 import geometrydash as gd
 from cocos2d import *
 
-class MenuLayer:
+class MyMenuLayer:
     def init(self):
         gd.MenuLayer.initO(self)
         sprite = CCSprite("GJ_button_01.png")
@@ -19,6 +19,6 @@ class SpriteTest(cinnamon.Mod):
         self.author = "spook"
         self.description = "Adds a sprite to the screen!"
         
-        cinnamon.hook(gd.MenuLayer.initN, gd.MenuLayer.initA, MenuLayer.init)
+        cinnamon.hook(gd.MenuLayer.init, MyMenuLayer.init)
 
 cinnamon.register_mod(SpriteTest)
