@@ -10,59 +10,70 @@
 #include <pybind11.h>
 #include <pybind11/embed.h>
 
-namespace py = pybind11;
+#include "core/utilities/path.h"
+#include "core/python.h"
+#include "core/logger.h"
+#include "core/module.h"
+
+// bindings (autogen)
+#include "bindings/geometrydash_bindings.h"
+#include "bindings/cocos2d_bindings.h"
+
+namespace pybind = pybind11;
 USING_NS_CC;
 
-// bindings
-#include "bindings/cocos2d/cocos.h"
-#include "bindings/geometrydash/geometrydash.h"
-#include "bindings/cinnamon.h"
-
-#include "macros.h"
-#include "utilities.h"
-#include "hooks/mod_menu.h"
-
 DWORD WINAPI dll_thread(void* hModule) {
-    utilities::initialize();
-    utilities::enableDebugMode();
+    AllocConsole();
+    FILE* fDummy;
+    freopen_s(&fDummy, "CONIN$", "r", stdin);
+    freopen_s(&fDummy, "CONOUT$", "w", stderr);
+    freopen_s(&fDummy, "CONOUT$", "w", stdout);
 
-    py::scoped_interpreter python;
+    pybind::scoped_interpreter python;
 
-    std::string mod_path = utilities::getGDPath();
-    mod_path.append("cinnamon\\mods\\");
-    py::module_::import("sys").attr("path").attr("append")(mod_path);
+    std::string mod_path = cinnamon::utilities::getModsPath();
+    pybind::module_::import("sys").attr("path").attr("append")(mod_path);
 
-    utilities::log("Cinnamon Initialized!", "INFO");
-
-    ModMenu::enable_hooks();
-    
-    utilities::log("ModMenu hooks enabled", "DEBUG");
-
-    py::gil_scoped_acquire acquire;
+    pybind::gil_scoped_acquire acquire;
 
     for (const auto& dirEntry : std::filesystem::directory_iterator(mod_path.c_str())) {
-        if (utilities::hasEnding(dirEntry.path().string(), ".py") && !dirEntry.is_directory()) {
-            std::string file = dirEntry.path().string().c_str();
+        std::string file = dirEntry.path().string();
 
-            utilities::log("Running Python file: " + file, "INFO");
+        if (dirEntry.is_directory()) {
+            cinnamon::logger::log("Found directory: " + file, "INFO");
+            for (const auto& modDirEntry : std::filesystem::directory_iterator(dirEntry.path().string().c_str())) {
+                std::string dirFile = modDirEntry.path().string();
+                if (modDirEntry.path().filename() == "main.py"
+                    | modDirEntry.path().filename() == "__main__.py"
+                    | modDirEntry.path().filename().string() == modDirEntry.path().parent_path().filename().string() + ".py") {
+                    cinnamon::logger::log("Found Python file: " + dirFile, "INFO");
 
-            try {
-                py::object mod = py::eval_file(file); // non cocos thread
+                    if (cinnamon::python::runPythonFile(dirFile)) {
+                        cinnamon::logger::log("Python file started: " + dirFile, "INFO");
+                    }
+                }
             }
-            catch (py::error_already_set& e) {
-                globals::startupErrorOccured = true;
-                py::print("Exception has occured while running python file: " + file);
-                py::print(e.what());
-                continue;
-            }
+        }
 
-            utilities::log("Python file started: " + file, "INFO");
+        else if (cinnamon::utilities::hasEnding(file, ".py")) {
+            cinnamon::logger::log("Found Python file: " + file, "INFO");
+
+            if (cinnamon::python::runPythonFile(file)) {
+                cinnamon::logger::log("Python file started: " + file, "INFO");
+            }
         }
     }
 
-    py::gil_scoped_release release;
+    cinnamon::logger::log("All modules loaded!", "INFO");
 
-    utilities::log("Main thread exiting...", "DEBUG");
+    // call on_all_modules_loaded
+    for (auto const& [key, val] : cinnamon::module::modules) {
+        if (val.attr("on_modules_loaded")) {
+            val.attr("on_modules_loaded")();
+        }
+    }
+
+    pybind::gil_scoped_release release;
     return 0;
 }
 
