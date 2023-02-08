@@ -27,10 +27,10 @@ jobs:
         python-version: '3.10'
       
     - name: Install CLI
-      run: python3 -3.10 -m pip install git+https://github.com/maple-ml/cli
+      run: py -3.10 -m pip install git+https://github.com/maple-ml/cli
       
     - name: Create bindings
-      run: python3 -3.10 -m maple bind
+      run: py -3.10 -m maple bind
 
     - name: Configure CMake
       run: cmake -G "Visual Studio 17 2022" -T host=x86 -A Win32 -S . -B "build32"
