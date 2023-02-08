@@ -28,6 +28,9 @@ DWORD WINAPI dll_thread(void* hModule) {
     freopen_s(&fDummy, "CONIN$", "r", stdin);
     freopen_s(&fDummy, "CONOUT$", "w", stderr);
     freopen_s(&fDummy, "CONOUT$", "w", stdout);
+    cinnamon::logger::setLoggingLevel(cinnamon::logger::LoggingLevel::DEBUG);
+
+    cinnamon::hooks::init();
 
     pybind::scoped_interpreter python;
 

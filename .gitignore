@@ -438,3 +438,4 @@ src/bindings/
 *.filters
 *.recipe
 cmake-build-release
+cmake-build-debug

@@ -33,6 +33,10 @@ namespace cinnamon {
         void setLoggingLevel(LoggingLevel level) {
             loggingLevel = level;
         }
+
+        void setLoggingLevel(std::string level) {
+            loggingLevel = getLoggingLevelFromString(level);
+        }
         
         // logging TODO: announce what mod sent the log
         // maybe get rid of c style casting

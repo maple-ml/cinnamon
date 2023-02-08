@@ -73,8 +73,20 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
         pyhook.def_readwrite("functionname", &cinnamon::hooks::PythonHook::m_functionname);
         pyhook.def_readwrite("address", &cinnamon::hooks::PythonHook::m_address);
         pyhook.def_readwrite("detour", &cinnamon::hooks::PythonHook::m_detour);
+
+    // logging
+    m.def("set_logging_level", pybind::overload_cast<cinnamon::logger::LoggingLevel>(&cinnamon::logger::setLoggingLevel));
+    m.def("set_logging_level", pybind::overload_cast<std::string>(&cinnamon::logger::setLoggingLevel));
+    pybind::enum_<cinnamon::logger::LoggingLevel>(m, "LoggingLevel")
+        .value("DEBUG", cinnamon::logger::LoggingLevel::DEBUG)
+        .value("INFO", cinnamon::logger::LoggingLevel::INFO)
+        .value("WARNING", cinnamon::logger::LoggingLevel::WARNING)
+        .value("ERROR", cinnamon::logger::LoggingLevel::ERROR)
+        .value("CRITICAL", cinnamon::logger::LoggingLevel::CRITICAL)
+        .export_values();
     
     m.def("register_mod", &cinnamon::module::register_mod);
+
 
     cinnamon::logger::log("Binded cinnamon", "DEBUG");
 }

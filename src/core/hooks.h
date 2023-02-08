@@ -42,6 +42,7 @@ namespace cinnamon {
                 MH_EnableHook((LPVOID)ret.second);
             }
 
+            // don't use this
             void disable() {
                 MH_DisableHook((LPVOID)m_address);
             }
@@ -68,6 +69,11 @@ namespace cinnamon {
             cinnamon::logger::log("Hooking " + addr + ": " + std::to_string((unsigned int)(address)), "DEBUG");
             MH_STATUS status = MH_CreateHook(address, hook, original);
             cinnamon::logger::log(std::string("Hooked ") + addr + std::string(" with status ") + std::string(MH_StatusToString(status)), "DEBUG");
+            return status;
+        }
+
+        MH_STATUS init() {
+            MH_STATUS status = MH_Initialize();
             return status;
         }
     }
