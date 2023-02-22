@@ -6,6 +6,7 @@
 #include "MinHook.h"
 
 namespace pybind = pybind11;
+using namespace cocos2d;
 
 namespace cinnamon {
     namespace python {
@@ -20,6 +21,61 @@ namespace cinnamon {
                 return false;
             }
             return true;
+        }
+
+        class CallPyOnMainNode : public CCNode {
+        protected:
+            pybind::object m_function;
+
+        public:
+            static CallPyOnMainNode* create(pybind::object func) {
+                auto ret = new CallPyOnMainNode;
+                if (ret) {
+                    ret->m_function = func;
+                    ret->autorelease();
+                    return ret;
+                }
+                CC_SAFE_DELETE(ret);
+                return nullptr;
+            }
+
+            void onInvoke() {
+                pybind::scoped_interpreter guard{};
+
+                PyObject_CallNoArgs(m_function.ptr());
+            }
+        };
+
+        class CallOnMainNode : public CCNode {
+        protected:
+            std::function<void()> m_function;
+
+        public:
+            static CallOnMainNode* create(std::function<void()> func) {
+                auto ret = new CallOnMainNode;
+                if (ret) {
+                    ret->m_function = func;
+                    ret->autorelease();
+                    return ret;
+                }
+                CC_SAFE_DELETE(ret);
+                return nullptr;
+            }
+
+            void onInvoke() {
+                m_function();
+            }
+        };
+
+        void runPyOnMain(pybind::function func) {
+            auto node = CallPyOnMainNode::create(func);
+            CCDirector::sharedDirector()->getRunningScene()->runAction(
+                CCSequence::create(
+                    CCDelayTime::create(0),
+                    CCCallFunc::create(node, callfunc_selector(CallPyOnMainNode::onInvoke)),
+                    nullptr
+                )
+            );
         }
     }
 }

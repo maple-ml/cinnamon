@@ -35,6 +35,7 @@ namespace cinnamon {
                     mod = mod_cls();
                 }
                 catch (const pybind::error_already_set& e) {
+                    // TODO: use logger
                     //globals::startupErrorOccured = true;
                     pybind::print("Exception has occured while initializing mod class: " + mod_cls.attr("__name__").cast<std::string>());
                     pybind::print(e.what());
@@ -86,7 +87,7 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
         .export_values();
     
     m.def("register_mod", &cinnamon::module::register_mod);
-
+    m.def("run", &cinnamon::python::runPyOnMain);
 
     cinnamon::logger::log("Binded cinnamon", "DEBUG");
 }
