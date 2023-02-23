@@ -16,8 +16,8 @@ endif()
 
 add_library(cocos2d INTERFACE)
 
-if(DEFINED ENV{pythonLocation})
-  set(PYTHON_PATH "$ENV{pythonLocation}")
+if(DEFINED ENV{cinnamonPythonLocation})
+  set(PYTHON_PATH "$ENV{cinnamonPythonLocation}")
 else()
   set(PYTHON_PATH "$ENV{LOCALAPPDATA}/Programs/Python/Python39-32/") # must use 32 bit version or ELSE
 endif()

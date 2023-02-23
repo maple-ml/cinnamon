@@ -71,7 +71,7 @@ DWORD WINAPI dll_thread(void* hModule) {
 
     // call on_all_modules_loaded
     for (auto const& [key, val] : cinnamon::module::modules) {
-        if (val.attr("on_modules_loaded")) {
+        if (pybind::hasattr(val, "on_modules_loaded")) {
             val.attr("on_modules_loaded")();
         }
     }
