@@ -44,4 +44,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Cinnamon Build
-        path: ./build32/Release/cinnamon.dll
+        path: ./build32/Release/

@@ -10,7 +10,7 @@ namespace pybind = pybind11;
 namespace cinnamon {
     namespace hooks {
         std::multimap<std::string, pybind::function> pythonHooks = std::multimap<std::string, pybind::function>();
-        std::multimap<std::string, PVOID> hooks = std::multimap<std::string, PVOID>();
+        std::multimap<std::string, void*> hooks = std::multimap<std::string, void*>();
 
         class PythonHook {
         public:
@@ -38,6 +38,43 @@ namespace cinnamon {
                 m_detour = detour;
 
                 cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(ret.first, detour));
+
+                MH_EnableHook((LPVOID)ret.second);
+            }
+
+            // don't use this
+            void disable() {
+                MH_DisableHook((LPVOID)m_address);
+            }
+        };
+
+        // C++ hook
+        class Hook {
+        public:
+            std::string m_functionname;
+            size_t m_address;
+            void* m_detour;
+
+            Hook() {}
+
+            Hook(std::string functionname, size_t address, void* detour) {
+                m_functionname = functionname;
+                m_address = address;
+                m_detour = detour;
+
+                cinnamon::hooks::hooks.insert(std::pair<std::string, void*>(functionname, detour));
+
+                MH_EnableHook((LPVOID)address);
+            }
+
+            Hook(std::pair<std::string, size_t>(*toHook)(pybind::function), void* detour) {
+                std::pair<std::string, size_t> ret = toHook(pybind::function());
+
+                m_functionname = ret.first;
+                m_address = ret.second;
+                m_detour = detour;
+
+                cinnamon::hooks::hooks.insert(std::pair<std::string, void*>(ret.first, detour));
 
                 MH_EnableHook((LPVOID)ret.second);
             }
