@@ -44,6 +44,16 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
         pyhook.def_readwrite("address", &cinnamon::hooks::PythonHook::m_address);
         pyhook.def_readwrite("detour", &cinnamon::hooks::PythonHook::m_detour);
 
+    // hook decorator
+    m.def("hook", [](pybind::function to_hook) {
+        return pybind::cpp_function([to_hook](pybind::function func) {
+            cinnamon::hooks::PythonHook(to_hook, func);
+            return pybind::cpp_function([func](pybind::args args, pybind::kwargs kwargs) {
+                return func(*args, **kwargs);
+            });
+        });
+    });
+
     // logging
     m.def("set_logging_level", pybind::overload_cast<cinnamon::logger::LoggingLevel>(&cinnamon::logger::setLoggingLevel));
     m.def("set_logging_level", pybind::overload_cast<std::string>(&cinnamon::logger::setLoggingLevel));
