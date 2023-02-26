@@ -19,6 +19,9 @@
 #include "bindings/geometrydash_bindings.h"
 #include "bindings/cocos2d_bindings.h"
 
+// hooks
+#include "core/hooks/ModdedMenuLayer.h"
+
 namespace pybind = pybind11;
 USING_NS_CC;
 
@@ -77,6 +80,11 @@ DWORD WINAPI dll_thread(void* hModule) {
     }
 
     pybind::gil_scoped_release release;
+
+
+    // enable hooks
+    ModdedMenuLayer::enable();
+
     return 0;
 }
 

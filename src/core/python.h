@@ -2,28 +2,17 @@
 #include "pybind11.h"
 #include "pybind11/embed.h"
 #include <cocos2d.h>
-#include "core/utilities/game.h"
 #include "MinHook.h"
+#include "core/macros.h"
 
 namespace pybind = pybind11;
 using namespace cocos2d;
 
 namespace cinnamon {
     namespace python {
-        bool runPythonFile(std::string file) {
-            try {
-                pybind::object mod = pybind::eval_file(file); // non cocos thread
-            }
-            catch (pybind::error_already_set& e) {
-                utilities::startup_error_occurred = true;
-                pybind::print("Exception has occured while running python file: " + file);
-                pybind::print(e.what());
-                return false;
-            }
-            return true;
-        }
+        CINNAMON_API bool runPythonFile(std::string file);
 
-        class CallPyOnMainNode : public CCNode {
+        class CINNAMON_API CallPyOnMainNode : public CCNode {
         protected:
             pybind::object m_function;
 
@@ -46,7 +35,7 @@ namespace cinnamon {
             }
         };
 
-        class CallOnMainNode : public CCNode {
+        class CINNAMON_API CallOnMainNode : public CCNode {
         protected:
             std::function<void()> m_function;
 
@@ -67,15 +56,6 @@ namespace cinnamon {
             }
         };
 
-        void runPyOnMain(pybind::function func) {
-            auto node = CallPyOnMainNode::create(func);
-            CCDirector::sharedDirector()->getRunningScene()->runAction(
-                CCSequence::create(
-                    CCDelayTime::create(0),
-                    CCCallFunc::create(node, callfunc_selector(CallPyOnMainNode::onInvoke)),
-                    nullptr
-                )
-            );
-        }
+        void CINNAMON_API runPyOnMain(pybind::function func);
     }
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <iostream>
+#include "core/macros.h"
 #undef ERROR
 
 namespace cinnamon {
@@ -13,53 +14,19 @@ namespace cinnamon {
             CRITICAL
         };
 
-        LoggingLevel loggingLevel = LoggingLevel::INFO;
+        CINNAMON_API extern LoggingLevel loggingLevel;
 
-        LoggingLevel getLoggingLevelFromString(std::string level) {
-            if (level == "DEBUG")
-                return LoggingLevel::DEBUG;
-            else if (level == "INFO")
-                return LoggingLevel::INFO;
-            else if (level == "WARNING")
-                return LoggingLevel::WARNING;
-            else if (level == "ERROR")
-                return LoggingLevel::ERROR;
-            else if (level == "CRITICAL")
-                return LoggingLevel::CRITICAL;
-            
-            return LoggingLevel::INFO;
-        }
+        CINNAMON_API LoggingLevel getLoggingLevelFromString(std::string level);
 
-        void setLoggingLevel(LoggingLevel level) {
-            loggingLevel = level;
-        }
+        CINNAMON_API void setLoggingLevel(LoggingLevel level);
 
-        void setLoggingLevel(std::string level) {
-            loggingLevel = getLoggingLevelFromString(level);
-        }
+        CINNAMON_API void setLoggingLevel(std::string level);
         
         // logging TODO: announce what mod sent the log
         // maybe get rid of c style casting
 
-        void log(std::string message, LoggingLevel levelInt) {
-            std::string stringmap[] = {
-                "DEBUG",
-                "INFO", 
-                "WARNING",
-                "ERROR",
-                "CRITICAL"
-            };
+        CINNAMON_API void log(std::string message, LoggingLevel levelInt);
 
-            std::string level = stringmap[(int)levelInt];
-
-            std::cout << "CINNAMON: " << level << " >> " << message << std::endl;
-        }
-
-        void log(std::string message, std::string level="INFO") {
-            LoggingLevel logLevel = getLoggingLevelFromString(level);
-
-            if ((int)logLevel >= (int)loggingLevel)
-                std::cout << "CINNAMON: " << level << " >> " << message << std::endl;
-        }
+        CINNAMON_API void log(std::string message, std::string level);
     }
 }
