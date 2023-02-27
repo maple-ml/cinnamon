@@ -2,9 +2,9 @@ name: Cinnamon Build
 
 on:
   push:
-    branches: [ rewrite ]
+    branches: [ master ]
   pull_request:
-    branches: [ rewrite ]
+    branches: [ master ]
 
 env:
   BUILD_TYPE: Release
