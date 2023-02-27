@@ -1,0 +1,98 @@
+#pragma once
+#include "pybind11.h"
+#include "pybind11/embed.h"
+#include <cocos2d.h>
+#include "MinHook.h"
+#include "core/logger.h"
+#include "core/macros.h"
+
+USING_NS_CC;
+namespace pybind = pybind11;
+
+namespace cinnamon {
+    namespace hooks {
+        CINNAMON_API extern std::multimap<std::string, pybind::function> pythonHooks;
+        CINNAMON_API extern std::multimap<std::string, void*> hooks;
+
+        class CINNAMON_API PythonHook {
+        public:
+            std::string m_functionname;
+            size_t m_address;
+            pybind::function m_detour;
+
+            PythonHook() {}
+
+            PythonHook(std::string functionname, size_t address, pybind::function detour) {
+                m_functionname = functionname;
+                m_address = address;
+                m_detour = detour;
+                
+                cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(functionname, detour));
+
+                MH_EnableHook((LPVOID)address);
+            }
+
+            PythonHook(pybind::function toHook, pybind::function detour) {
+                std::pair<std::string, size_t> ret = toHook(detour).cast<std::pair<std::string, size_t>>();
+
+                m_functionname = ret.first;
+                m_address = ret.second;
+                m_detour = detour;
+
+                cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(ret.first, detour));
+
+                MH_EnableHook((LPVOID)ret.second);
+            }
+
+            // don't use this
+            void disable() {
+                MH_DisableHook((LPVOID)m_address);
+            }
+        };
+
+        // C++ hook
+        class CINNAMON_API Hook {
+        public:
+            std::string m_functionname;
+            size_t m_address;
+            void* m_detour;
+
+            Hook() {}
+
+            Hook(std::string functionname, size_t address, void* detour) {
+                m_functionname = functionname;
+                m_address = address;
+                m_detour = detour;
+
+                cinnamon::hooks::hooks.insert(std::pair<std::string, void*>(functionname, detour));
+
+                MH_EnableHook((LPVOID)address);
+            }
+
+            Hook(std::pair<std::string, size_t>(*toHook)(pybind::function), void* detour) {
+                std::pair<std::string, size_t> ret = toHook(pybind::function());
+
+                m_functionname = ret.first;
+                m_address = ret.second;
+                m_detour = detour;
+
+                cinnamon::hooks::hooks.insert(std::pair<std::string, void*>(ret.first, detour));
+
+                MH_EnableHook((LPVOID)ret.second);
+            }
+
+            // don't use this
+            void disable() {
+                MH_DisableHook((LPVOID)m_address);
+            }
+        };
+
+        CINNAMON_API PythonHook hookPython(std::string functionname, size_t address, pybind::function detour);
+
+        CINNAMON_API PythonHook hookPython(pybind::function toHook, pybind::function detour);
+
+        CINNAMON_API MH_STATUS hookCinnamon(PVOID address, PVOID hook, LPVOID* original);
+
+        CINNAMON_API MH_STATUS init();
+    }
+}

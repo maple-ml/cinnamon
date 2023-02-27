@@ -15,11 +15,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - uses: ilammy/msvc-dev-cmd@v1
+
+    - uses: actions/setup-python@v4 # needed for bindings (match) TODO: update cinnamon's main python version to 3.10
+      with:
+        python-version: '3.10'
+
     - uses: actions/setup-python@v4
       with:
         python-version: '3.9'
         architecture: 'x86'
+      
+    - name: Install CLI
+      run: py -3.10 -m pip install git+https://github.com/maple-ml/cli
+      
+    - name: Create bindings
+      run: py -3.10 -m maple bind
 
     - name: Configure CMake
       run: cmake -G "Visual Studio 17 2022" -T host=x86 -A Win32 -S . -B "build32"
@@ -31,4 +44,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Cinnamon Build
-        path: ./build32/
+        path: ./build32/Release/

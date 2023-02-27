@@ -426,6 +426,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+.idea/
 
 # JetBrains Rider
 *.sln.iml
@@ -433,3 +434,8 @@ out/
 
 build32/
 CMakeCache.txt
+src/bindings/
+*.filters
+*.recipe
+cmake-build-release
+cmake-build-debug
