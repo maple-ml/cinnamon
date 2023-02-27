@@ -5,11 +5,17 @@ import geometrydash as gd
 from cocos2d import *
 
 class MenuLayer:
-    @cinna.hook(gd.MenuLayer.init)
+    @cinnamon.hook(gd.MenuLayer.init)
     def init(self):
         result = gd.MenuLayer.initO(self)
 
         sprite = CCSprite.create("GJ_button_01.png")
+
+        director = CCDirector.sharedDirector()
+
+        winSize = director.getWinSize()
+
+        sprite.setPosition(winSize.width / 3, winSize.height / 3)
         
         self.addChild(sprite, 9999)
 
