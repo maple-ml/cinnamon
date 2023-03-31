@@ -286,6 +286,11 @@ public:
     ,m_pDisabledImage(NULL)
     {}
 
+    // cinnamon additon to fix a weird error
+    CCMenuItemSprite::CCMenuItemSprite(const CCMenuItemSprite&) {
+
+    }
+
     /** creates a menu item with a normal, selected and disabled image*/
     static CCMenuItemSprite * create(CCNode* normalSprite, CCNode* selectedSprite, CCNode* disabledSprite = NULL);
     /** creates a menu item with a normal and selected image with target/selector 
