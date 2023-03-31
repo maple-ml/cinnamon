@@ -434,7 +434,8 @@ out/
 
 build32/
 CMakeCache.txt
-src/bindings/
+src/bindings/cocos2d_bindings.h
+src/bindings/geometrydash_bindings.h
 *.filters
 *.recipe
 cmake-build-release

@@ -1,0 +1,123 @@
+
+#pragma once
+#include <cocos2d.h>
+#include "core/utilities/game.h"
+#include "core/hooks.h"
+#include "pybind11.h"
+#include "pybind11/embed.h"
+
+#define PAD(size) char __STR_CAT__(__, __STR_CAT__(pad, __LINE__))[size] = {};
+
+USING_NS_CC;
+namespace pybind = pybind11;
+
+class CCMenuItemSpriteExtra : public CCMenuItemSprite {
+private:
+	float m_sizeMult = 1.25;
+	float m_origScale = 1.f;
+    pybind::function m_pythonCallback;
+	bool m_usePythonCallback = false;
+public:
+	virtual void selected() override {
+		CCMenuItemSprite::selected();
+		auto resize = cocos2d::CCScaleTo::create(0.3f, m_sizeMult * m_origScale);
+		auto bounce = cocos2d::CCEaseBounceOut::create(resize);
+		this->runAction(bounce);
+	};
+	virtual void unselected() override {
+		CCMenuItemSprite::unselected();
+		auto resize = cocos2d::CCScaleTo::create(0.3f, m_origScale);
+		auto bounce = cocos2d::CCEaseBounceOut::create(resize);
+		this->runAction(bounce);
+	}
+	virtual void activate() override {
+        if (m_usePythonCallback) {
+			pybind::gil_scoped_acquire acquire;
+			m_pythonCallback(this);
+			pybind::gil_scoped_release release;
+        }
+        else {
+			CCMenuItemSprite::activate();
+        }
+		this->stopAllActions();
+		this->setScale(m_origScale);
+	}
+	virtual void setScale(float scale) override {
+		CCMenuItemSprite::setScale(scale);	
+		m_origScale = scale;
+	}
+	static CCMenuItemSpriteExtra* create(CCNode* normalSprite, CCNode* selectedSprite, CCObject* target, SEL_MenuHandler selector) {
+		auto spriteItem = new CCMenuItemSpriteExtra;
+		if (spriteItem && spriteItem->initWithNormalSprite(normalSprite, selectedSprite, nullptr, target, selector)) 
+			spriteItem->autorelease();
+		else {
+			delete spriteItem;
+			spriteItem = nullptr;
+		}
+		return spriteItem;
+	}
+    // custom cinammon stuff to allow for python callbacks
+	static CCMenuItemSpriteExtra* create(CCNode* normalSprite, CCNode* selectedSprite, CCObject* target, pybind::function callback) {
+		auto spriteItem = new CCMenuItemSpriteExtra;
+
+        spriteItem->m_pythonCallback = callback;
+		spriteItem->m_usePythonCallback = true;
+
+		if (spriteItem && spriteItem->initWithNormalSprite(normalSprite, selectedSprite, nullptr, target, nullptr)) 
+			spriteItem->autorelease();
+		else {
+			delete spriteItem;
+			spriteItem = nullptr;
+		}
+		return spriteItem;
+	}
+
+	static CCMenuItemSpriteExtra* create(CCNode* normalSprite, CCObject* target, pybind::function callback) {
+		auto spriteItem = new CCMenuItemSpriteExtra;
+
+        spriteItem->m_pythonCallback = callback;
+		spriteItem->m_usePythonCallback = true;
+
+		if (spriteItem && spriteItem->initWithNormalSprite(normalSprite, nullptr, nullptr, target, nullptr)) 
+			spriteItem->autorelease();
+		else {
+			delete spriteItem;
+			spriteItem = nullptr;
+		}
+		return spriteItem;
+	}
+
+	void setSizeMult(float multiplier) { m_sizeMult = multiplier; }
+};
+
+namespace manualbindings {
+    void cocos2d_init(pybind::module_ &m) {
+		pybind::class_<CCMenuItem, CCNodeRGBA>(m, "CCMenuItem")
+			.def_static("create", pybind::overload_cast<>(&CCMenuItem::create))
+			.def_static("create", pybind::overload_cast<CCObject*, SEL_MenuHandler>(&CCMenuItem::create))
+			.def("initWithTarget", &CCMenuItem::initWithTarget)
+			.def("activate", &CCMenuItem::activate, pybind::return_value_policy::automatic_reference)
+			.def("selected", &CCMenuItem::selected, pybind::return_value_policy::automatic_reference)
+			.def("unselected", &CCMenuItem::unselected, pybind::return_value_policy::automatic_reference)
+			.def("setEnabled", &CCMenuItem::setEnabled, pybind::return_value_policy::automatic_reference)
+			.def("isEnabled", &CCMenuItem::isEnabled, pybind::return_value_policy::automatic_reference);
+
+		pybind::class_<CCMenuItemSprite, CCMenuItem>(m, "CCMenuItemSprite")
+			.def("initWithNormalSprite", &CCMenuItemSprite::initWithNormalSprite, pybind::return_value_policy::automatic_reference)
+			.def("selected", &CCMenuItemSprite::selected, pybind::return_value_policy::automatic_reference)
+			.def("unselected", &CCMenuItemSprite::unselected, pybind::return_value_policy::automatic_reference)
+			.def("setEnabled", &CCMenuItemSprite::setEnabled, pybind::return_value_policy::automatic_reference);
+	}
+
+    void geometrydash_init(pybind::module_ &m) {
+		pybind::class_<CCMenuItemSpriteExtra, CCMenuItemSprite>(m, "CCMenuItemSpriteExtra")
+            .def("setSizeMult", &CCMenuItemSpriteExtra::setSizeMult, pybind::return_value_policy::automatic_reference)
+            .def("setScale", &CCMenuItemSpriteExtra::setScale, pybind::return_value_policy::automatic_reference)
+            .def("activate", &CCMenuItemSpriteExtra::activate, pybind::return_value_policy::automatic_reference)
+            .def("unselected", &CCMenuItemSpriteExtra::unselected, pybind::return_value_policy::automatic_reference)
+            .def("selected", &CCMenuItemSpriteExtra::selected, pybind::return_value_policy::automatic_reference)
+            .def_static("create", pybind::overload_cast<CCNode*, CCNode*, CCObject*, SEL_MenuHandler>(&CCMenuItemSpriteExtra::create), pybind::return_value_policy::automatic_reference)
+			.def_static("create", pybind::overload_cast<CCNode*, CCNode*, CCObject*, pybind::function>(&CCMenuItemSpriteExtra::create), pybind::return_value_policy::automatic_reference)
+			.def_static("create", pybind::overload_cast<CCNode*, CCObject*, pybind::function>(&CCMenuItemSpriteExtra::create), pybind::return_value_policy::automatic_reference);
+    }
+}
