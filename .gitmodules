@@ -1,0 +1,3 @@
+[submodule "vanilla"]
+	path = vanilla
+	url = https://github.com/maple-ml/vanilla
