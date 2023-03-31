@@ -14,10 +14,10 @@ namespace cinnamon {
 
         class CINNAMON_API CallPyOnMainNode : public CCNode {
         protected:
-            pybind::object m_function;
+            pybind::function m_function;
 
         public:
-            static CallPyOnMainNode* create(pybind::object func) {
+            static CallPyOnMainNode* create(pybind::function func) {
                 auto ret = new CallPyOnMainNode;
                 if (ret) {
                     ret->m_function = func;
@@ -29,9 +29,12 @@ namespace cinnamon {
             }
 
             void onInvoke() {
-                pybind::scoped_interpreter guard{};
+                //pybind::scoped_interpreter guard{};
+                pybind::gil_scoped_acquire acquire;
 
-                PyObject_CallNoArgs(m_function.ptr());
+                m_function();
+
+                pybind::gil_scoped_release release;
             }
         };
 

@@ -1,7 +1,9 @@
 #include "pybind11.h"
 #include "pybind11/embed.h"
+#include "pybind11/functional.h"
 #include <cocos2d.h>
 #include "core/module.h"
+#include <functional>
 
 namespace cinnamon {
     namespace module {

@@ -6,6 +6,7 @@
 
 #include "bindings/geometrydash_bindings.h"
 #include "bindings/cocos2d_bindings.h"
+#include "bindings/manual_bindings.h"
 
 #include "core/utilities/path.h"
 #include "core/python.h"

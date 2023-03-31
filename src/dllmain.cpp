@@ -18,6 +18,7 @@
 // bindings (autogen)
 #include "bindings/geometrydash_bindings.h"
 #include "bindings/cocos2d_bindings.h"
+#include "bindings/manual_bindings.h"
 
 // hooks
 #include "core/hooks/ModdedMenuLayer.h"
@@ -104,4 +105,3 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     }
     return TRUE;
 }
-
