@@ -33,7 +33,7 @@ public:
 	virtual void activate() override {
         if (m_usePythonCallback) {
 			pybind::gil_scoped_acquire acquire;
-			m_pythonCallback(this);
+			m_pythonCallback(m_pListener, this);
 			pybind::gil_scoped_release release;
         }
         else {
@@ -109,7 +109,7 @@ namespace manualbindings {
 			.def("setEnabled", &CCMenuItemSprite::setEnabled, pybind::return_value_policy::automatic_reference);
 	}
 
-    void geometrydash_init(pybind::module_ &m) {
+    void geometry_dash_init(pybind::module_ &m) {
 		pybind::class_<CCMenuItemSpriteExtra, CCMenuItemSprite>(m, "CCMenuItemSpriteExtra")
             .def("setSizeMult", &CCMenuItemSpriteExtra::setSizeMult, pybind::return_value_policy::automatic_reference)
             .def("setScale", &CCMenuItemSpriteExtra::setScale, pybind::return_value_policy::automatic_reference)

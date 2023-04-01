@@ -1,5 +1,5 @@
 #include <cocos2d.h>
-#include "bindings/geometrydash_bindings.h"
+#include "bindings/geometry_dash_bindings.h"
 #include "bindings/cocos2d_bindings.h"
 #include "bindings/manual_bindings.h"
 #include "core/hooks.h"
@@ -102,6 +102,6 @@ public:
     }
 
     static void enable() {
-        //cinnamon::hooks::Hook(MenuLayer::init, &ModdedMenuLayer::init);
+        cinnamon::hooks::Hook(MenuLayer::init, &ModdedMenuLayer::init);
     }
 };

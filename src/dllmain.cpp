@@ -16,7 +16,7 @@
 #include "core/module.h"
 
 // bindings (autogen)
-#include "bindings/geometrydash_bindings.h"
+#include "bindings/geometry_dash_bindings.h"
 #include "bindings/cocos2d_bindings.h"
 #include "bindings/manual_bindings.h"
 
