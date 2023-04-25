@@ -3,6 +3,7 @@
 #include <cocos2d.h>
 #include "core/utilities/game.h"
 #include "core/hooks.h"
+#include "core/python.h"
 #include "pybind11.h"
 #include "pybind11/embed.h"
 
@@ -32,9 +33,16 @@ public:
 	}
 	virtual void activate() override {
         if (m_usePythonCallback) {
-			pybind::gil_scoped_acquire acquire;
-			m_pythonCallback(m_pListener, this);
-			pybind::gil_scoped_release release;
+			try {
+				pybind::gil_scoped_acquire acquire;
+				m_pythonCallback(m_pListener, this);
+				pybind::gil_scoped_release release;
+			}
+			catch (pybind::error_already_set& e) {
+				cinnamon::logger::log("An exception occurred while calling a python callback:", cinnamon::logger::LoggingLevel::ERROR);
+				// traceback exception
+				cinnamon::python::printPythonException(e);
+			}
         }
         else {
 			CCMenuItemSprite::activate();

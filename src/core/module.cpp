@@ -33,7 +33,7 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
         mod.def_readwrite("enabled", &cinnamon::module::PythonMod::m_enabled);
         mod.def("enable", &cinnamon::module::PythonMod::enable);
         mod.def("disable", &cinnamon::module::PythonMod::disable);
-        mod.def("isEnabled", &cinnamon::module::PythonMod::isEnabled);
+        mod.def("is_enabled", &cinnamon::module::PythonMod::isEnabled);
         mod.def("on_enable", &cinnamon::module::PythonMod::on_enable);
         mod.def("on_disable", &cinnamon::module::PythonMod::on_disable);
 

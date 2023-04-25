@@ -60,5 +60,6 @@ namespace cinnamon {
         };
 
         void CINNAMON_API runPyOnMain(pybind::function func);
+        void CINNAMON_API printPythonException(pybind::error_already_set& e);
     }
 }
