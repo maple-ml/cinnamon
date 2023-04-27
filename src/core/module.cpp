@@ -23,48 +23,52 @@ namespace cinnamon {
         void PythonMod::start_file_watcher() {
             // seperate thread to watch
             std::thread([this]() {
-                std::filesystem::file_time_type lastWrite = std::filesystem::last_write_time(m_filePath);
                 while (true) {
                     DWORD dwWaitResult = WaitForSingleObject(m_fileChangeHandle, INFINITE);
 
                     if (dwWaitResult == WAIT_OBJECT_0) {
-                        if (std::filesystem::last_write_time(m_filePath) > lastWrite) {
-                            std::stringstream ss;
-                            ss << "File \""
-                            << pybind::module::import("os").attr("path").attr("basename")(m_filePath).cast<std::string>()
-                            << "\" changed, reloading";
+                        std::stringstream ss;
+                        ss << "File \""
+                        << m_modPath
+                        << "\" changed, reloading";
 
-                            std::string str = ss.str();
+                        std::string str = ss.str();
 
-                            cinnamon::logger::log(str, "INFO");
+                        cinnamon::logger::log(str, "INFO");
 
-                            lastWrite = std::filesystem::last_write_time(m_filePath);
+                        pybind::gil_scoped_acquire acquire;
 
-                            pybind::gil_scoped_acquire acquire;
+                        try {
+                            // remove old hook handlers by itering over hooks::pythonHooks
+                            std::multimap<std::string, pybind::function>::iterator pyitr;
+                            for (pyitr = cinnamon::hooks::pythonHooks.begin(); pyitr != cinnamon::hooks::pythonHooks.end(); pyitr++) {
+                                cinnamon::logger::log("Removing hook handler: " + pyitr->second.attr("__name__").cast<std::string>(), "DEBUG");
+                                cinnamon::hooks::pythonHooks.erase(pyitr);
+                            }
 
-                            try {
-                                // remove old hook handlers
-                                for (auto& hook : this->m_hooks) {
-                                    cinnamon::logger::log("Removing hook handler: " + hook->m_functionname, "DEBUG");
-                                    hook->remove();
+                            // run updated file
+
+                            for (const auto& modDirEntry : std::filesystem::directory_iterator(m_modPath)) {
+                                std::string dirFile = modDirEntry.path().string();
+                                if (modDirEntry.path().filename() == "main.py"
+                                    | modDirEntry.path().filename() == "__main__.py"
+                                    | modDirEntry.path().filename().string() == modDirEntry.path().parent_path().filename().string() + ".py") {
+
+                                    cinnamon::python::runPythonFile(dirFile);
                                 }
-
-                                // run updated file
-                                cinnamon::python::runPythonFile(m_filePath);
                             }
-                            catch (pybind::error_already_set& e) {
-                                cinnamon::logger::log("Failed to reload module: " + std::string(e.what()), "ERROR");
-                            }
-
-                            pybind::gil_scoped_release release;
-
-                            cinnamon::logger::log("Reloaded module " + m_name, "INFO");
-
-                            break;
                         }
+                        catch (pybind::error_already_set& e) {
+                            cinnamon::logger::log("Failed to reload module: " + std::string(e.what()), "ERROR");
+                        }
+
+                        pybind::gil_scoped_release release;
+
+                        cinnamon::logger::log("Reloaded module " + m_name, "INFO");
+
+                        break;
                     } else {
                         cinnamon::logger::log("Failed while watching file for changes", "ERROR");
-                        std::cout << dwWaitResult << std::endl;
                         break;
                     }
                     Sleep(2000);
@@ -86,7 +90,7 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
         mod.def_readwrite("author", &cinnamon::module::PythonMod::m_author);
         mod.def_readwrite("description", &cinnamon::module::PythonMod::m_description);
         mod.def_readwrite("enabled", &cinnamon::module::PythonMod::m_enabled);
-        mod.def_readwrite("file_path", &cinnamon::module::PythonMod::m_filePath);
+        mod.def_readwrite("mod_path", &cinnamon::module::PythonMod::m_modPath);
         mod.def_readwrite("hooks", &cinnamon::module::PythonMod::m_hooks);
         mod.def("enable", &cinnamon::module::PythonMod::enable);
         mod.def("disable", &cinnamon::module::PythonMod::disable);

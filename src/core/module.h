@@ -33,7 +33,7 @@ namespace cinnamon {
             std::string m_version;
             std::string m_author;
             std::string m_description;
-            std::string m_filePath;
+            std::string m_modPath;
             HANDLE m_fileChangeHandle;
             std::vector<cinnamon::hooks::PythonHook*> m_hooks;
 
@@ -70,19 +70,24 @@ namespace cinnamon {
             // events and stuff
 
             PythonMod() {
-                m_filePath = cinnamon::python::getPythonFileFromObject(pybind::module::import("__main__"));
-                
+                std::string full_path = cinnamon::python::getPythonFileFromObject(pybind::module::import("__main__"));
+                std::string directory;
+                const size_t last_slash_idx = full_path.rfind('\\');
+                if (std::string::npos != last_slash_idx) {
+                    directory = full_path.substr(0, last_slash_idx);
+                }
+                m_modPath = directory; // use mods full directory path
 
                 m_fileChangeHandle = FindFirstChangeNotificationA(
-                    (LPCSTR)((pybind::module::import("os").attr("path").attr("dirname")(m_filePath).cast<std::string>()).c_str()),
-                    FALSE,
+                    (LPCSTR)(m_modPath.c_str()),
+                    TRUE,
                     FILE_NOTIFY_CHANGE_LAST_WRITE
                 );
                 if (m_fileChangeHandle == INVALID_HANDLE_VALUE) {
                     cinnamon::logger::log("Failed to begin watching file for changes: code " + GetLastError(), "ERROR");
                 }
                 else {
-                    cinnamon::logger::log("Watching file for changes", "DEBUG");
+                    cinnamon::logger::log("Watching file (" + m_modPath + ") for changes", "DEBUG");
                 }
 
                 start_file_watcher();
@@ -105,7 +110,7 @@ namespace cinnamon {
                     return;
                 }
                 cinnamon::module::modules.insert<std::pair<std::string, pybind::object>>(std::pair<std::string, pybind::object>(mod.attr("name").cast<std::string>(), mod));
-                cinnamon::module::modInstances.insert(std::pair<std::string, PythonMod*>(mod.attr("file_path").cast<std::string>(), mod.cast<PythonMod*>()));
+                cinnamon::module::modInstances.insert(std::pair<std::string, PythonMod*>(mod.attr("mod_path").cast<std::string>(), mod.cast<PythonMod*>()));
 
                 cinnamon::logger::log("Starting loop", "DEBUG");
                 mod.attr("loop")();

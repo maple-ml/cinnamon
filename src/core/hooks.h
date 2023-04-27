@@ -62,7 +62,6 @@ namespace cinnamon {
                 for (auto it = range.first; it != range.second; ++it) {
                     if (it->second == m_detour) {
                         pythonHooks.erase(it);
-                        //std::cout << "Removed hook for " << m_functionname << " from " << m_modFilePath << " addr" << m_detour << std::endl;
                         return true;
                     }
                 }
