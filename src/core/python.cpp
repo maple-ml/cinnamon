@@ -42,5 +42,9 @@ namespace cinnamon {
             pybind::print(std::string(pybind::str(formatted_str)), "end"_a="");
             pybind::gil_scoped_release release;
         }
+
+        std::string getPythonFileFromObject(pybind::object obj) {
+            return pybind::module::import("inspect").attr("getfile")(obj).cast<std::string>();
+        }
     }
 }
