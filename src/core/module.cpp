@@ -106,6 +106,9 @@ PYBIND11_EMBEDDED_MODULE(cinnamon, m) {
         pyhook.def_readwrite("functionname", &cinnamon::hooks::PythonHook::m_functionname);
         pyhook.def_readwrite("address", &cinnamon::hooks::PythonHook::m_address);
         pyhook.def_readwrite("detour", &cinnamon::hooks::PythonHook::m_detour);
+        pyhook.def_readwrite("enabled", &cinnamon::hooks::PythonHook::m_enabled);
+        pyhook.def("enable", &cinnamon::hooks::PythonHook::enable);
+        pyhook.def("disable", &cinnamon::hooks::PythonHook::disable);
 
     // hook decorator
     m.def("hook", [](pybind::function to_hook) {

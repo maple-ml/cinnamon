@@ -31,11 +31,10 @@ namespace cinnamon {
                 m_address = address;
                 m_detour = detour;
                 m_modFilePath = cinnamon::python::getPythonFileFromObject(m_detour);
-                m_enabled = true;
-                
-                cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(functionname, detour));
 
-                MH_EnableHook((LPVOID)address);
+                enable();
+
+                cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(functionname, detour));
             }
 
             PythonHook(pybind::function toHook, pybind::function detour) {
@@ -45,50 +44,28 @@ namespace cinnamon {
                 m_address = ret.second;
                 m_detour = detour;
                 m_modFilePath = cinnamon::python::getPythonFileFromObject(m_detour);
-                m_enabled = true;
+
+                enable();
 
                 cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(ret.first, detour));
-
-                MH_EnableHook((LPVOID)ret.second);
-            }
-
-            void disable() {
-                m_enabled = false;
-            }
-
-            bool remove() {
-                // remove this pair from map
-                auto range = cinnamon::hooks::pythonHooks.equal_range(m_functionname);
-                for (auto it = range.first; it != range.second; ++it) {
-                    if (it->second == m_detour) {
-                        pythonHooks.erase(it);
-                        return true;
-                    }
-                }
-                return false;
             }
 
             void enable() {
-                m_enabled = true;
-
-                // iterate of modInstances
-                for (const auto& [key, value] : cinnamon::module::modInstances) {
-                    std::cout << value->getName() << std::endl;
+                if (!m_enabled) {
+                    m_enabled = true;
+                    cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(m_functionname, m_detour));
+                    MH_EnableHook((LPVOID)m_address);
                 }
-
-                //check if already saved in hooks
-                for (auto& hook : cinnamon::module::modInstances[m_modFilePath]->m_hooks) {
-                    if (
-                        hook->m_detour.attr("__name__").cast<std::string>() == m_detour.attr("__name__").cast<std::string>() &&
-                        hook->m_functionname == m_functionname &&
-                        hook->m_modFilePath == m_modFilePath
-                    ) {
-                        return;
-                    }
-                }
-                // save this hook to the mod
-                cinnamon::module::modInstances[m_modFilePath]->m_hooks.push_back(this);
             }
+
+            void disable() {
+                if (m_enabled) {
+                    m_enabled = false;
+                    cinnamon::hooks::pythonHooks.erase(m_functionname);
+                    MH_DisableHook((LPVOID)m_address);
+                }
+            }
+
         };
 
         // C++ hook
