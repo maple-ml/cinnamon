@@ -5,6 +5,8 @@
 #include "MinHook.h"
 #include "core/logger.h"
 #include "core/macros.h"
+#include "core/python.h"
+#include "core/module.h"
 
 USING_NS_CC;
 namespace pybind = pybind11;
@@ -19,6 +21,8 @@ namespace cinnamon {
             std::string m_functionname;
             size_t m_address;
             pybind::function m_detour;
+            std::string m_modFilePath;
+            bool m_enabled;
 
             PythonHook() {}
 
@@ -26,6 +30,8 @@ namespace cinnamon {
                 m_functionname = functionname;
                 m_address = address;
                 m_detour = detour;
+                m_modFilePath = cinnamon::python::getPythonFileFromObject(m_detour);
+                m_enabled = true;
                 
                 cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(functionname, detour));
 
@@ -38,15 +44,51 @@ namespace cinnamon {
                 m_functionname = ret.first;
                 m_address = ret.second;
                 m_detour = detour;
+                m_modFilePath = cinnamon::python::getPythonFileFromObject(m_detour);
+                m_enabled = true;
 
                 cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(ret.first, detour));
 
                 MH_EnableHook((LPVOID)ret.second);
             }
 
-            // don't use this
             void disable() {
-                MH_DisableHook((LPVOID)m_address);
+                m_enabled = false;
+            }
+
+            bool remove() {
+                // remove this pair from map
+                auto range = cinnamon::hooks::pythonHooks.equal_range(m_functionname);
+                for (auto it = range.first; it != range.second; ++it) {
+                    if (it->second == m_detour) {
+                        pythonHooks.erase(it);
+                        //std::cout << "Removed hook for " << m_functionname << " from " << m_modFilePath << " addr" << m_detour << std::endl;
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            void enable() {
+                m_enabled = true;
+
+                // iterate of modInstances
+                for (const auto& [key, value] : cinnamon::module::modInstances) {
+                    std::cout << value->getName() << std::endl;
+                }
+
+                //check if already saved in hooks
+                for (auto& hook : cinnamon::module::modInstances[m_modFilePath]->m_hooks) {
+                    if (
+                        hook->m_detour.attr("__name__").cast<std::string>() == m_detour.attr("__name__").cast<std::string>() &&
+                        hook->m_functionname == m_functionname &&
+                        hook->m_modFilePath == m_modFilePath
+                    ) {
+                        return;
+                    }
+                }
+                // save this hook to the mod
+                cinnamon::module::modInstances[m_modFilePath]->m_hooks.push_back(this);
             }
         };
 
