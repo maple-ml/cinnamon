@@ -43,6 +43,26 @@ DWORD WINAPI dll_thread(void* hModule) {
 
     pybind::gil_scoped_acquire acquire;
 
+    cinnamon::logger::log("Generating stubgen", "INFO");
+
+    try {
+        pybind::exec(
+            "from distutils.sysconfig import get_python_lib\n"
+            "import pybind11_stubgen\n"
+            "import logging\n"
+
+            "logging.getLogger(\"pybind11_stubgen\").disabled = True\n"
+            "pybind11_stubgen.main([\"cinnamon\", \"--ignore-invalid=all\", \"--output-dir\", get_python_lib(), \"--root-module-suffix\", \"\"])\n" 
+            "pybind11_stubgen.main([\"cocos2d\", \"--ignore-invalid=all\", \"--output-dir\", get_python_lib(), \"--root-module-suffix\", \"\"])\n"
+            "pybind11_stubgen.main([\"geometry_dash\", \"--ignore-invalid=all\", \"--output-dir\", get_python_lib(), \"--root-module-suffix\", \"\"])\n"
+        );
+    }
+    catch (pybind::error_already_set& e) {
+        cinnamon::logger::log("Failed to run stubgen: " + std::string(e.what()), "ERROR");
+    }
+
+    cinnamon::logger::log("Stubgen generation complete", "DEBUG");
+
     for (const auto& dirEntry : std::filesystem::directory_iterator(mod_path.c_str())) {
         std::string file = dirEntry.path().string();
 
