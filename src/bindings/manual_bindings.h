@@ -7,7 +7,9 @@
 #include "pybind11.h"
 #include "pybind11/embed.h"
 
+#ifndef PAD
 #define PAD(size) char __STR_CAT__(__, __STR_CAT__(pad, __LINE__))[size] = {};
+#endif
 
 USING_NS_CC;
 namespace pybind = pybind11;

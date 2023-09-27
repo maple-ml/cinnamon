@@ -38,6 +38,8 @@ namespace cinnamon {
             }
 
             PythonHook(pybind::function toHook, pybind::function detour) {
+                pybind::print(toHook, detour);
+
                 std::pair<std::string, size_t> ret = toHook(detour).cast<std::pair<std::string, size_t>>();
 
                 m_functionname = ret.first;
@@ -48,6 +50,14 @@ namespace cinnamon {
                 enable();
 
                 cinnamon::hooks::pythonHooks.insert(std::pair<std::string, pybind::function>(ret.first, detour));
+
+                // loop through pythonHooks
+
+                std::multimap<std::string, pybind::function>::iterator itr;
+                for (itr = cinnamon::hooks::pythonHooks.begin(); itr != cinnamon::hooks::pythonHooks.end(); ++itr) {
+                    // need to cast second to string
+                    std::cout << itr->first << std::endl;
+                }
             }
 
             void enable() {

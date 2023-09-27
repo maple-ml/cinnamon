@@ -4,11 +4,88 @@
 #include "bindings/manual_bindings.h"
 #include "core/hooks.h"
 #include "core/macros.h"
+#include "core/module.h"
+
+/*class ModListCell : public TableViewCell {
+protected:
+    float m_width;
+    float m_height;
+    CCMenu* m_menu;
+    CCLabelBMFont* m_description;
+    CCMenuItemToggler* m_enableToggle = nullptr;
+    cocos2d::CCLayerColor* m_backgroundLayer;
+    cinnamon::module::PythonMod* m_mod;
+
+public:
+    void draw() {
+        reinterpret_cast<StatsCell*>(this)->StatsCell::draw(reinterpret_cast<StatsCell*>(this));
+    }
+
+    ModListCell* ModListCell::create(char const* key, CCSize size) {
+        auto pRet = new ModListCell(key, size);
+        if (pRet) {
+            return pRet;
+        }
+        CC_SAFE_DELETE(pRet);
+        return nullptr;
+    }
+
+    ModListCell(char const* name, CCSize size) {
+        
+    }
+
+    void updateBGColor(int index) {
+        if (index & 1) m_backgroundLayer->setColor(ccc3(0xc2, 0x72, 0x3e));
+        else m_backgroundLayer->setColor(ccc3(0xa1, 0x58, 0x2c));
+        m_backgroundLayer->setOpacity(0xff);
+    }
+};
+
+class ModListLayer : public CustomListView {
+    static CustomListView* create(
+        cocos2d::CCArray* items, float itemHeight = 40.f, float width = 358.f,
+        float height = 220.f
+    );
+
+    void setupList() {
+        if (!m_entries->count()) return;
+        m_tableView->reloadData();
+
+        // fix content layer content size so the
+        // list is properly aligned to the top
+        auto coverage = calculateChildCoverage(m_tableView->m_contentLayer);
+        m_tableView->m_contentLayer->setContentSize({ -coverage.origin.x + coverage.size.width,
+                                                    -coverage.origin.y + coverage.size.height });
+
+        if (m_entries->count() == 1) {
+            m_tableView->moveToTopWithOffset(m_itemSeparation * 2);
+        } else if (m_entries->count() == 2) {
+            m_tableView->moveToTopWithOffset(-m_itemSeparation);
+        } else {
+            m_tableView->moveToTop();
+        }
+    }
+
+    ModListCell* getListCell(char const* key) {
+        return ModListCell::create(key, { m_width, m_itemSeparation });
+    }
+
+    void loadCell(TableViewCell* cell, int index) {
+        auto node = dynamic_cast<CCNode*>(m_entries->objectAtIndex(index));
+        if (node) {
+            auto lcell = (ModListCell*)(cell);
+            node->setContentSize(lcell->getScaledContentSize());
+            node->setPosition(0, 0);
+            lcell->addChild(node);
+            lcell->updateBGColor(index);
+        }
+    }
+};*/
 
 class ModMenuLayer : public CCLayer {
 private:
-    //GJListLayer* m_list;
-    //CCArray* m_mods;
+    GJListLayer* m_list;
+    CCArray* m_mods;
 
 public:
     static ModMenuLayer* create() {
@@ -55,6 +132,25 @@ public:
             
         setKeypadEnabled(true);
 
+        // for now we're going to use cclabelbmfont to display the mod list
+
+        // iterate through cinnamon::module::modInstances and add them to the list
+
+        float height = 80;
+        
+        std::map<std::string, cinnamon::module::PythonMod*>::iterator it;
+        for (it = cinnamon::module::modInstances.begin(); it != cinnamon::module::modInstances.end(); ++it) {
+            CCLabelBMFont* label = CCLabelBMFont::create((it->second->getName() + " by " + it->second->getAuthor()).c_str(), "bigFont.fnt");
+            label->setAlignment(kCCTextAlignmentCenter);
+            label->setAnchorPoint({0.5, 0.5});
+            label->setPosition(winSize.width / 2, winSize.height - height);
+            label->setScale(0.5);
+
+            addChild(label);
+
+            height += 30;
+        }
+
         return true;
     }
 
@@ -76,19 +172,17 @@ public:
         std::cout << "init from cinnamon internals" << std::endl;
 
         CCSprite* spr = CCSprite::create("GJ_button_01.png");
+        CCMenu* menu = CCMenu::create();
 
         CCDirector* director = CCDirector::sharedDirector();
 
-        spr->setPosition(ccp(director->getWinSize().width / 2, director->getWinSize().height / 2));
+        CCMenuItemSpriteExtra* btn = CCMenuItemSpriteExtra::create(spr, nullptr, self, menu_selector(onButtonPress));
 
-        self->addChild(spr, 9999);
+        menu->addChild(btn);
 
-        //CCMenu* bottomMenu = getChild<CCMenu>(self, 13);
+        menu->setPosition(ccp(director->getWinSize().width - 25, director->getWinSize().height - 25));
 
-        //CCMenuItemSpriteExtra* btn = CCMenuItemSpriteExtra::create(CCSprite::create("GJ_button_01.png"), nullptr, self, menu_selector(onButtonPress));
-
-        //bottomMenu->addChild(btn);
-        //bottomMenu->alignItemsHorizontallyWithPadding(5.0f);
+        self->addChild(menu, 10);
 
         return ret;
     }
@@ -101,7 +195,24 @@ public:
         CCDirector::sharedDirector()->pushScene(CCTransitionFade::create(0.5, scene));
     }
 
+    static bool initG(GJGarageLayer* self) {
+        bool ret = GJGarageLayer::initO(self);
+
+        std::cout << "init from cinnamon internals GJGARAGE" << std::endl;
+
+        CCSprite* spr = CCSprite::create("GJ_button_01.png");
+
+        CCDirector* director = CCDirector::sharedDirector();
+
+        spr->setPosition(ccp(director->getWinSize().width / 2, director->getWinSize().height / 2));
+
+        self->addChild(spr, 9999);
+
+        return ret;
+    }
+
     static void enable() {
         cinnamon::hooks::Hook(MenuLayer::init, &ModdedMenuLayer::init);
+        cinnamon::hooks::Hook(GJGarageLayer::init, &ModdedMenuLayer::initG);
     }
 };

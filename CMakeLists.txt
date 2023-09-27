@@ -9,10 +9,12 @@ add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set(CMAKE_SIZEOF_VOID_P 4)
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -target i386-pc-windows-msvc")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -target i386-pc-windows-msvc")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -target i386-pc-windows-msvc -bigobj")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -target i386-pc-windows-msvc -bigobj")
   add_definitions("--target=i386-pc-windows-msvc")
 endif()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -bigobj")
 
 add_library(cocos2d INTERFACE)
 

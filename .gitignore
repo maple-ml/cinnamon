@@ -440,3 +440,4 @@ src/bindings/geometry_dash_bindings.h
 *.recipe
 cmake-build-release
 cmake-build-debug
+src/bindings/geometry_dash_module.h

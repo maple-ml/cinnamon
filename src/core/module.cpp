@@ -27,12 +27,10 @@ namespace cinnamon {
                     DWORD dwWaitResult = WaitForSingleObject(m_fileChangeHandle, INFINITE);
 
                     if (dwWaitResult == WAIT_OBJECT_0) {
-                        std::stringstream ss;
-                        ss << "File \""
-                        << m_modPath
-                        << "\" changed, reloading";
+                        std::stringstream streamstream;
+                        streamstream << "File \"" << m_modPath << "\" changed, reloading";
 
-                        std::string str = ss.str();
+                        std::string str = streamstream.str();
 
                         cinnamon::logger::log(str, "INFO");
 

@@ -29,7 +29,6 @@ namespace cinnamon {
             }
 
             void onInvoke() {
-                //pybind::scoped_interpreter guard{};
                 pybind::gil_scoped_acquire acquire;
 
                 m_function();
