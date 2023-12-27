@@ -104,6 +104,8 @@ public:
 
 namespace manualbindings {
     void cocos2d_init(pybind::module_ &m) {
+        cinnamon::logger::log("Initializing manual cocos2d bindings", cinnamon::logger::LoggingLevel::INFO);
+
 		pybind::class_<CCMenuItem, CCNodeRGBA>(m, "CCMenuItem")
 			.def_static("create", pybind::overload_cast<>(&CCMenuItem::create))
 			.def_static("create", pybind::overload_cast<CCObject*, SEL_MenuHandler>(&CCMenuItem::create))
@@ -114,6 +116,18 @@ namespace manualbindings {
 			.def("setEnabled", &CCMenuItem::setEnabled, pybind::return_value_policy::automatic_reference)
 			.def("isEnabled", &CCMenuItem::isEnabled, pybind::return_value_policy::automatic_reference);
 
+        pybind::class_<CCMenuItemImage, CCMenuItem>(m, "CCMenuItemImage")
+            .def_static("create", pybind::overload_cast<const char*, const char*>(&CCMenuItemImage::create))
+            .def_static("create", pybind::overload_cast<const char*, const char*, const char*>(&CCMenuItemImage::create))
+            .def_static("create", pybind::overload_cast<const char*, const char*, CCObject*, SEL_MenuHandler>(&CCMenuItemImage::create))
+            .def_static("create", pybind::overload_cast<const char*, const char*, const char*, CCObject*, SEL_MenuHandler>(&CCMenuItemImage::create))
+            .def("init", &CCMenuItemImage::init)
+            .def("initWithNormalImage", &CCMenuItemImage::initWithNormalImage)
+            .def("setNormalSpriteFrame", &CCMenuItemImage::setNormalSpriteFrame)
+            .def("setSelectedSpriteFrame", &CCMenuItemImage::setSelectedSpriteFrame)
+            .def("setDisabledSpriteFrame", &CCMenuItemImage::setDisabledSpriteFrame)
+            .def_static("create", pybind::overload_cast<>(&CCMenuItemImage::create));
+
 		pybind::class_<CCMenuItemSprite, CCMenuItem>(m, "CCMenuItemSprite")
 			.def("initWithNormalSprite", &CCMenuItemSprite::initWithNormalSprite, pybind::return_value_policy::automatic_reference)
 			.def("selected", &CCMenuItemSprite::selected, pybind::return_value_policy::automatic_reference)
@@ -122,6 +136,7 @@ namespace manualbindings {
 	}
 
     void geometry_dash_init(pybind::module_ &m) {
+        cinnamon::logger::log("Initializing manual geometry dash bindings", cinnamon::logger::LoggingLevel::INFO);
 		pybind::class_<CCMenuItemSpriteExtra, CCMenuItemSprite>(m, "CCMenuItemSpriteExtra")
             .def("setSizeMult", &CCMenuItemSpriteExtra::setSizeMult, pybind::return_value_policy::automatic_reference)
             .def("setScale", &CCMenuItemSpriteExtra::setScale, pybind::return_value_policy::automatic_reference)

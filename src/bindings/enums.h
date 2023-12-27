@@ -386,3 +386,5 @@ enum class Speed {
 	Faster = 3,
 	Fastest = 4,
 };
+
+enum class GauntletType {};
