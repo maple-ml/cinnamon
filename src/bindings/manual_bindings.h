@@ -23,14 +23,14 @@ private:
 public:
 	virtual void selected() override {
 		CCMenuItemSprite::selected();
-		auto resize = cocos2d::CCScaleTo::create(0.3f, m_sizeMult * m_origScale);
-		auto bounce = cocos2d::CCEaseBounceOut::create(resize);
+		auto resize = CCScaleTo::create(0.3f, m_sizeMult * m_origScale);
+		auto bounce = CCEaseBounceOut::create(resize);
 		this->runAction(bounce);
 	};
 	virtual void unselected() override {
 		CCMenuItemSprite::unselected();
-		auto resize = cocos2d::CCScaleTo::create(0.3f, m_origScale);
-		auto bounce = cocos2d::CCEaseBounceOut::create(resize);
+		auto resize = CCScaleTo::create(0.3f, m_origScale);
+		auto bounce = CCEaseBounceOut::create(resize);
 		this->runAction(bounce);
 	}
 	virtual void activate() override {
@@ -66,6 +66,7 @@ public:
 		}
 		return spriteItem;
 	}
+
     // custom cinammon stuff to allow for python callbacks
 	static CCMenuItemSpriteExtra* create(CCNode* normalSprite, CCNode* selectedSprite, CCObject* target, pybind::function callback) {
 		auto spriteItem = new CCMenuItemSpriteExtra;
@@ -88,12 +89,13 @@ public:
         spriteItem->m_pythonCallback = callback;
 		spriteItem->m_usePythonCallback = true;
 
-		if (spriteItem && spriteItem->initWithNormalSprite(normalSprite, nullptr, nullptr, target, nullptr)) 
+		if (spriteItem && spriteItem->initWithNormalSprite(normalSprite, nullptr, nullptr, target, nullptr))
 			spriteItem->autorelease();
 		else {
 			delete spriteItem;
 			spriteItem = nullptr;
 		}
+
 		return spriteItem;
 	}
 

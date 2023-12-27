@@ -195,24 +195,7 @@ public:
         CCDirector::sharedDirector()->pushScene(CCTransitionFade::create(0.5, scene));
     }
 
-    static bool initG(GJGarageLayer* self) {
-        bool ret = GJGarageLayer::initO(self);
-
-        std::cout << "init from cinnamon internals GJGARAGE" << std::endl;
-
-        CCSprite* spr = CCSprite::create("GJ_button_01.png");
-
-        CCDirector* director = CCDirector::sharedDirector();
-
-        spr->setPosition(ccp(director->getWinSize().width / 2, director->getWinSize().height / 2));
-
-        self->addChild(spr, 9999);
-
-        return ret;
-    }
-
     static void enable() {
         cinnamon::hooks::Hook(MenuLayer::init, &ModdedMenuLayer::init);
-        cinnamon::hooks::Hook(GJGarageLayer::init, &ModdedMenuLayer::initG);
     }
 };

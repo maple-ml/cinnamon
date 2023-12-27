@@ -89,6 +89,9 @@ public:
     void setAmplitudeRate(float amp);
     float getAmplitudeRate(void);
 
+    // 2.2 addition
+    bool getM_bFirstTick();
+
 protected:
     float m_elapsed;
     bool   m_bFirstTick;

@@ -112,6 +112,10 @@ void CC_DLL ccDrawSolidPoly( const CCPoint *poli, unsigned int numberOfPoints, c
 /** draws a circle given the center, radius and number of segments. */
 void CC_DLL ccDrawCircle( const CCPoint& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, float scaleX, float scaleY);
 void CC_DLL ccDrawCircle( const CCPoint& center, float radius, float angle, unsigned int segments, bool drawLineToCenter);
+RT_ADD(void CC_DLL ccDrawFilledCircle( const CCPoint& center, float radius, float angle, unsigned int segments);)
+
+// 2.2 additions
+void ccDrawCircleSegment(cocos2d::CCPoint const&, float, float, float, unsigned int, bool, float, float);
 
 /** draws a quad bezier path
  @warning This function could be pretty slow. Use it only for debugging purposes.

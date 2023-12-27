@@ -113,6 +113,9 @@ protected:
     CCObject*       m_pListener;
     SEL_MenuHandler    m_pfnSelector;
     int             m_nScriptTapHandler;
+
+    // 2.2 additions
+    int m_unknown;
 };
 
 /** @brief An abstract class for "label" CCMenuItemLabel items 

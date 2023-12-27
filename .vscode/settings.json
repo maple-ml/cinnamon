@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "*.van": "cpp",
-        "sstream": "cpp",
-        "iosfwd": "cpp"
-    }
-}

@@ -434,10 +434,9 @@ out/
 
 build32/
 CMakeCache.txt
-src/bindings/cocos2d_bindings.h
-src/bindings/geometry_dash_bindings.h
 *.filters
 *.recipe
 cmake-build-release
 cmake-build-debug
-src/bindings/geometry_dash_module.h
+vanilla.exe
+.vscode/

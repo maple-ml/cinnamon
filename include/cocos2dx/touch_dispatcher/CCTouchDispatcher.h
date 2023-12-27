@@ -197,10 +197,10 @@ public:
      */
     CCTouchHandler* findHandler(CCTouchDelegate *pDelegate);
 
-    RT_ADD(
+    /*RT_ADD(
         void incrementForcePrio(int priority);
         void decrementForcePrio(int priority);
-    )
+    )*/
 protected:
     void forceRemoveDelegate(CCTouchDelegate *pDelegate);
     void forceAddHandler(CCTouchHandler *pHandler, CCArray* pArray);
@@ -223,10 +223,11 @@ protected:
     // 4, 1 for each type of event
     struct ccTouchHandlerHelperData m_sHandlerHelperData[ccTouchMax];
 
-    RT_ADD(
-        CC_SYNTHESIZE_NV(bool, m_bForcePrio, ForcePrio);
-        CC_SYNTHESIZE_NV(int, m_nTargetPrio, TargetPrio);
-    )
+    // 2.2 changes
+
+    //CC_SYNTHESIZE_NV(int, m_forcePrio, ForcePrio);
+    //void* m_unknown;
+    //CC_SYNTHESIZE_NV(int, m_targetPrio, TargetPrio);
 };
 
 // end of input group
